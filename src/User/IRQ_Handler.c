@@ -80,7 +80,6 @@ uint8 step_last;
 void PIT0_IRQHandler()
 {
     Timer_IQR_handle();
-	LED_Reverse(1);
     PIT_Flag_Clear(PIT0);       //清中断标志位
     /*用户添加所需代码*/  
 }
@@ -132,7 +131,6 @@ void PIT2_IRQHandler()//显示屏中断
     Show_IQR_handle();
     PIT_Flag_Clear(PIT2);       //清中断标志位
     /*用户添加所需代码*/
-    pit2_test_flag = 1;
 }
 /*---------------------------------------------------------------
 【函    数】PIT3_Interrupt
