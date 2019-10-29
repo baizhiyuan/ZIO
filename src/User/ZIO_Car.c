@@ -3,65 +3,64 @@
 
 float KP = 0; 
 float KD = 0;
-float P = 50; 
-float I = 30;
-float D = 30;
+float P = 100; 
+float I = 80;
+float D = 80;
 float Lspeed_temp_1;
 float Rspeed_temp_1;
 float Lspeed_temp_2 = 0;
 float Rspeed_temp_2 = 0;
 
-int perform = 0;
+int perform=0;
 int lamp[2][12];//前后循迹情况
 int lamp_num[2][12];//前后循迹偏差的对应赋值
 uint8 arm[] = { 0x55,0x55,0x05,0x06,0x00,0x01,0x00 };//机械臂动作组
-uint16_t batv[12];
+uint16_t batv[12] = 0;
+uint16_t batv_last[12];
 uint16_t batv_paixu[12];
 
-int8 counter_black=0;    //十字黑线计数
-int8 counter_pos=0; //丁字定位点计数
+
 int8 decide=0; //元素判断
-uint8 counter_X=0;
-uint8 counter_T=0;
+int8 pos_flag = 0;//定位标志位
+uint8 kong_flag = 1;//循迹出去时的盲走开启
+uint8 part_flag = 0;//功能标志位
+uint8 counter_X=0;//十字交叉口计数
+uint8 counter_T=0;//T字交叉口计数
 uint8 transform=0;
 uint8 transform_now=0;//达到先亮后灭的情况，表示经过一条黑线
-uint8 lamp_center;
+int16 error = 0;//循迹偏差
 
-int16 error = 0;
-int16 twinkle_delay = 0;
-int16 Right_front_speed;
+int16 Right_front_speed;//四轮速度
 int16 Left_front_speed;
 int16 Right_rear_speed;
 int16 Left_rear_speed;
-int16 Left_front_goalspeed;
+
+
+int16 Left_front_goalspeed;//四轮目标速度
 int16 Right_front_goalspeed;
 int16 Left_rear_goalspeed;
 int16 Right_rear_goalspeed;
-
-uint8 kong_flag = 1;
-uint8 part_flag = 0;
-int16 temp_num = 0;
+int16 temp_num = 0;//脉冲数计数
 int16 left_num = 0;
 int16 right_num = 0;
-short ABGet_left, ABGet_right;
+int16 Target_num = 0;//目标脉冲数
+int16 Target_speed = 0;//目标速度
 
-_pid_t pid_left_front;    
-_pid_t pid_right_front;		
-_pid_t pid_track;				
+_pid_t pid_left_front;    //左轮pid结构体
+_pid_t pid_right_front;		//右轮pid结构体
+_pid_t pid_track;				  //循迹pid结构体
 
-volatile uint8_t step_flag = 0;
-vint8 pos_flag = 0;
-vint16 Target_num = 0;
-vint16 Target_speed = 0;
+volatile uint8_t step_flag = 0;   //步进电机标志位
+volatile short ABGet_left, ABGet_right;   //脉冲数记录
 
 
 void GCXL(void)
 {
-  while(GPIO_PinRead(PTD13) == 1){
-  PART();
-  if(perform == 1) Part_Choose();
-  track_PID();counter_sum();
-  }delayms(100);
+  start();
+  while(1)
+  {
+    track_PID();//counter_sum();
+  }
 }
 
 void Sys_init_all(void)
@@ -91,6 +90,8 @@ void Positioning(void)
     track_PID();
     if(pos_flag != 1){
       a=0;
+      Target_speed = 0;
+      PIT_Delayms(PIT3, 5000);
       break;
     }
     //lamp_center = GPIO_PinRead(PTC10);
@@ -122,13 +123,13 @@ void Obstacle(void){
 
 void start(void)
 { 
-  uint8 a=1;
-  while (a)
+  uint8 z=1;
+  while (z)
   {  
-    switch(KEY_Read(0))     
+    switch(KEY_Read(1))     
     {
-      case 2:LED_Reverse(1); a=0;Target_speed =60;break;  
-      case 1:step_flag = 1;break; 
+      case 1:LED_Reverse(1);Target_speed =60;z = 0;break;  
+      case 2:step_flag = 1;break; 
       case 3:step_flag = 3;break; 
       default: break; 
     }delayms(100);
@@ -147,14 +148,15 @@ void Uart_Init(void)
 void Timer_Init(void)
 {
     PIT_Init(PIT0, 5);		//速度环更新
-    PIT_Step(PIT1, 300);
+    PIT_Step(PIT1, 300);  //300us，2200*0.3=660ms
     PIT_Init(PIT2, 200);	//显示屏刷新	
     NVIC_SetPriority(PIT0_IRQn,NVIC_EncodePriority(NVIC_GetPriorityGrouping(),2,3));
     NVIC_SetPriority(PIT1_IRQn,NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1,2));					
     NVIC_SetPriority(PIT2_IRQn,NVIC_EncodePriority(NVIC_GetPriorityGrouping(),3,4));
     NVIC_EnableIRQ(PIT0_IRQn);			          //使能PIT0_IRQn的中断	
     NVIC_EnableIRQ(PIT1_IRQn);	                  //使能中断函数在IRQ_Handle内
-    NVIC_EnableIRQ(PIT2_IRQn);		          
+    NVIC_EnableIRQ(PIT2_IRQn);		 
+    EnableInterrupts;         //开总中断
 }
 
 
@@ -169,11 +171,9 @@ void Timer_IQR_handle()
 	Lspeed_temp_2 = Lspeed_temp_1; Rspeed_temp_2 = Rspeed_temp_1;
 
   if(pos_flag == 1){
-    left_num +=ABGet_left;  
-    right_num +=ABGet_right;
-    temp_num = left_num + right_num;
+    temp_num = temp_num + ABGet_left + ABGet_right;
     if(Target_num < temp_num){
-      Target_speed = 0;pos_flag = 0;left_num = 0;right_num = 0;}
+      temp_num = 0;pos_flag = 0;}
   }
 
 	PID_Control(&pid_left_front, Left_front_speed, Left_front_goalspeed);//增量式PID速度环
@@ -207,8 +207,11 @@ void paixu(unsigned char *p,unsigned char len)
  }
 }
 
-void ADC_turn(void)
+void ADC_turn(void)    //读取循迹模块的模拟量并转化成开关量，但阈值有波动
 {        /* 获取 ADC通道值 */
+   // for (int i = 0;i<12;i++;){
+    //  batv_last[i]=batv[i];}
+    
     batv[0] = (uint16_t)(ADC_Get(0)*0.806);
     batv[1] = (uint16_t)(ADC_Get(1)*0.806);
     batv[2] = (uint16_t)(ADC_Get(2)*0.806);
@@ -223,59 +226,97 @@ void ADC_turn(void)
     batv[9] = (uint16_t)(ADC_Get(9)*0.806);
     batv[10] = (uint16_t)(ADC_Get(10)*0.806);
     batv[11] = (uint16_t)(ADC_Get(11)*0.806);
-    for(int t=0;t<12;t++)
+        for(int t=0;t<12;t++)
     {
       if( batv[t]< 2500 ) lamp[0][t] = 1;
       else lamp[0][t] = 0;
     }
-    
-    int temp;
-    for(int i=1;i<11;i++){
-      if(i != 5 || i != 6){
-      temp = 2*lamp[0][i] - lamp[0][i-1] - lamp[0][i+1];
-      if(temp == 2) lamp[0][i]=0;
-      else if(temp == -2) lamp[0][i]=1;}
+
+ /* for(intj =0;j<12;j++)
+  {
+    int16 cha;
+    cha = batv[j]-batv_last[j];
+    if (cha>400){
     }
+  }*/
+/*
+    if(batv[0]< 1800) lamp[0][0] = 1;
+    else lamp[0][0] = 0;
+
+    if(batv[1]< 1400) lamp[0][1] = 1;
+    else lamp[0][1] = 0;
+
+    if(batv[2]< 1500) lamp[0][2] = 1;
+    else lamp[0][2] = 0;
+
+    if(batv[3]< 1500) lamp[0][3] = 1;
+    else lamp[0][3] = 0;
+
+    if(batv[4]< 1400) lamp[0][4] = 1;
+    else lamp[0][0] = 0;
+
+    if(batv[5]< 1200) lamp[0][5] = 1;
+    else lamp[0][5] = 0;
+
+    if(batv[6]< 1100) lamp[0][6] = 1;
+    else lamp[0][6] = 0;
+
+    if(batv[7]> 1000) lamp[0][7] = 1;
+    else lamp[0][7] = 0;
+
+    if(batv[8]< 1600) lamp[0][8] = 1;
+    else lamp[0][8] = 0;
+
+    if(batv[9]< 1200) lamp[0][9] = 1;
+    else lamp[0][0] = 0;
+    
+    if(batv[10]< 1300) lamp[0][10] = 1;
+    else lamp[0][10] = 0;
+     
+    if(batv[11]< 1400) lamp[0][11] = 1;
+    else lamp[0][11] = 0;*/
 }
 
-void read_lamp_values(void)
+void read_lamp_values(void)  //根据传感器计算出偏移量error
 {
   ADC_turn();
-  int error_current = 0;
-  uint8 lamp_Lsum = 0;
+  int error_current = 0;   //当前偏差
+  uint8 lamp_Lsum = 0;    //左半边灯循迹到黑线的数量
   uint8 lamp_Rsum = 0;
-  for(int j = 0; j < 12; j ++){
+  for(int j = 0; j < 12; j ++){     //对不同的灯判断到黑线进行相应的赋值
     if(lamp[0][j] == 1){
       lamp_num[0][j] = 2*j - 11;            //-11 -9 -7 -5 -3 -1  1  3  5  7  9  11
       if(j < 6)lamp_Lsum ++;
       else lamp_Rsum ++;
     }else lamp_num[0][j] = 0;
     error_current += lamp_num[0][j];//前循迹偏差值
-  }if (lamp_Rsum > 3 ) {
+  }if ((lamp_Lsum > 2) && (lamp_Rsum > 2)) {      
     if(transform == 1) decide = 1;//十字路口  1 1 1 1 1 1     直行
     error = 0;
-  /*}else if ((lamp_Lsum < 3)&&(lamp_Rsum > 3)) {
-    decide = 2;//定位点
-    error = 0;*/
+  }else if ((lamp_Lsum < 3) && (lamp_Rsum > 2)) {
+    if(transform == 1) decide = 2;//定位点
+    error = 0;
+  }else if ((lamp_Lsum == 0)&&(lamp_Rsum == 0)) {
+    decide = 3;
+    error = 0;
   }else error = error_current;
-  /*if ((lamp_Lsum == 0)&&(lamp_Rsum == 0)) {
-    if(kong_flag == 0){
-      if ((error > 0)&&(error < 30)) error = 35;//  0 0 0 0 0前面循迹迷失，以上次偏差情况进行反向补偿 
-      else if((error < 0)&&(error > -30)) error = -35; 
-    }else Target_speed = 80;}*/
 
+  /*  if(kong_flag == 0){
+      if ((error > 0)&&(error < 30)) error = 35;//  0 0 0 0 0前面循迹迷失，以上次偏差情况进行反向补偿
+      else if((error < 0)&&(error > -30)) error = -35; 
+    }else error = 0;*/
   if (lamp_Lsum+lamp_Rsum == 2) transform = 1;//这一次不在交叉线，在普通白线
 }
 
 void counter_sum(void){
 
-    if(counter_X < 2){
+  if(counter_X < 2){
       if(decide == 1){
         counter_X++;
         transform = 0;
         decide = 0;
         perform = 1;}
-    }else if(counter_X == 2){
+  }else if(counter_X == 2){
       if(counter_T < 3){
         if(decide == 2){
           counter_T++; 
@@ -289,21 +330,21 @@ void counter_sum(void){
           decide = 0;
           perform = 1;
           counter_T=0;}}
-    }else if(counter_X == 3){
+  }else if(counter_X == 3){
       if(counter_T < 3){
         if(decide == 2){
           counter_T++; 
           transform = 0;
           decide = 0;
           perform = 1;}
-      }else if(counter_T==3){
+  }else if(counter_T==3){
         if(decide == 1){
           counter_X++;
           transform = 0;
           decide = 0;
           perform = 1;}
       }
-    }
+  }
 }
 /*
 void counter_sum(void){
@@ -321,7 +362,7 @@ void counter_sum(void){
 void PART(void)
 {  
     if(counter_X == 0 && counter_T == 0) part_flag=1;
-    else if(counter_X == 1 && counter_T == 0) part_flag=2;
+    else if(counter_X == 1 && counter_T == 0) part_flag=1;
     else if(counter_X == 2 && counter_T == 0) part_flag=2;
     else if(counter_X == 2 && counter_T == 1) part_flag=11;
     else if(counter_X == 2 && counter_T == 2) part_flag=12;
@@ -333,11 +374,12 @@ void PART(void)
    /* else if(counter_X == 3 && counter_T == 4) part_flag=24;
     else if(counter_X == 3 && counter_T == 5) part_flag=25;
     else if(counter_X == 3 && counter_T == 6) part_flag=26;*/
-    else if(counter_X == 4) {counter_X = 0;counter_T = 0;}
+    else if(counter_X == 4) {delayms(500);Target_speed = 0;}
     else {part_flag=0;}
-    perform = 1;
+    //perform = 1;
 }
-/*void PART_all(void)
+/*
+void PART_all(void)
 {  
     if(counter_X == 0) part_flag=1;
     else if(counter_X == 1) part_flag=2;
@@ -354,29 +396,37 @@ void PART(void)
     else if(counter_X == 3 && counter_T == 6) part_flag=26;
     else if(counter_X == 10) {counter_X = 0;Target_speed = 0;}
     else {part_flag=0;}
-    perform = 1;
 }*/
 
 void Part_Choose(void)
 {
     switch(part_flag){
-        case 1:Target_speed = 60;break;
-        case 2:Target_speed = 90;break;
-        case 11:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 1;delayms(5000);Target_speed = 50;break;
-        case 12:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 2;delayms(2000);break;
-        case 13:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 3;delayms(5000);Target_speed = 80;step_flag = 2;break;
+        case 1:Target_speed = 70;break; 
+        case 2:Target_speed = 100;break;
+        case 11:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 1;delayms(8000);Target_speed = 50;break;
+        case 12:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 2;delayms(8000);Target_speed = 50;break;
+        case 13:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 3;delayms(8000);Target_speed = 60;step_flag = 2;break;
         case 3:break;
               //Obstacle();break;//避障区域
                // Target_speed = 100;track_PID ();counter_sum();break;    
-        case 21:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 1;delayms(5000);Target_speed = 50;break;
-        case 22:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 2;delayms(2000);Target_speed = 50;break;
-        case 23:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 3;delayms(2000);Target_speed = 50;break;
+        case 21:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 1;delayms(8000);Target_speed = 50;break;
+        case 22:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 2;delayms(8000);Target_speed = 50;break;
+        case 23:Target_speed = 30; Positioning();UART_PutBuff(UART3, arm, 7);step_flag = 3;delayms(8000);Target_speed = 50;break;
       /*  case 24:Target_speed = 50; Positioning();UART_PutBuff(UART3, arm, 7);delayms(2000);Target_speed = 50;break;
         case 25:Target_speed = 50; Positioning();UART_PutBuff(UART3, arm, 7);delayms(2000);Target_speed = 50;break;
         case 26:Target_speed = 50; Positioning();UART_PutBuff(UART3, arm, 7);delayms(2000);Target_speed = 50;break;*/
         default: Target_speed = 0;break;
     }
     perform = 0;
+    if(Target_speed < 80) {
+      P =150;
+      I = 80;
+      D = 80;
+    }else {
+      P =100;
+      I = 80;
+      D = 80 ;
+    }
 }
 
 void Pid_Init(void)
@@ -399,9 +449,9 @@ void Pid_Init(void)
 	pid_right_front.last_last_err=0;
 	pid_right_front.result=0;
 
-  pid_track.kp=100;
-	pid_track.ki=80;
-	pid_track.kd=80;
+  pid_track.kp=P;
+	pid_track.ki=I;
+	pid_track.kd=D;
 	
 	pid_track.err=0;
 	pid_track.last_err=0;
@@ -582,7 +632,6 @@ void Motor_Init(void)
 
 void STEP_Init(void)
 {
-  GPIO_PinInit(PTD13, GPI, 0); 
 	GPIO_PinInit(PTE27, GPO, 0);          
 	GPIO_PinInit(PTE28, GPO, 0);
 }
@@ -623,8 +672,8 @@ void Show_IQR_handle()
   sprintf(txt,"%1d ",lamp_num[0][11]);
     OLED_P6x8Str(120,2,(uint8_t*)txt);
 
-  sprintf(txt,"pos_flag:%3d mm/0.1s",pos_flag);
-    OLED_P6x8Str(5,3,(uint8_t*)txt);
+ /* sprintf(txt,"Target:%3d mm/0.1s",speed);
+    OLED_P6x8Str(5,3,(uint8_t*)txt);*/
 
   sprintf(txt,"Error:%1d ",error);
     OLED_P6x8Str(5,4,(uint8_t*)txt);
