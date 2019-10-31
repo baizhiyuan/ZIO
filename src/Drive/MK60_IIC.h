@@ -3,16 +3,16 @@
 #include "common.h" 
 #include "MK60_GPIO.h"
 
-#define IIC_SCL_PIN  PTE7 //模拟IIC的SCL信号  1.修改引脚即可修改IIC接口
-#define IIC_SDA_PIN  PTE8 //模拟IIC的SDA信号
+#define IIC_SCL_PIN  PTD8 //模拟IIC的SCL信号  1.修改引脚即可修改IIC接口
+#define IIC_SDA_PIN  PTD9 //模拟IIC的SDA信号
 
 #define SDA_IN()  GPIO_PinSetDir(IIC_SDA_PIN, 0);	//输入
 #define SDA_OUT() GPIO_PinSetDir(IIC_SDA_PIN, 1);	//输出
 
 	 
-#define IIC_SCL    PTE7_OUT  //SCL            2.修改引脚即可修改IIC接口    
-#define IIC_SDA    PTE8_OUT  //SDA	 
-#define READ_SDA   PTE8_IN   //输入SDA  
+#define IIC_SCL    PTD8_OUT  //SCL            2.修改引脚即可修改IIC接口    
+#define IIC_SDA    PTD9_OUT  //SDA	 
+#define READ_SDA   PTD9_IN   //输入SDA 
 
 
 /*---------------------------------------------------------------

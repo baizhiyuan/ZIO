@@ -28,6 +28,7 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 【返回值】无 
 【参数值】无 
 QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
+/*
 #ifdef LQ_OLED
 void Test_9AX(void)
 { 
@@ -124,7 +125,7 @@ void Test_9AX(void)
     }
     
 }
-#endif
+#endif*/
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
 【作  者】LQ-005
 【功能说明】初始化 九轴
@@ -145,7 +146,7 @@ void Init_9AX(void)
   // [5]: ST=0 self test disabled
   // [4-2]: DR[2-0]=000 for 800Hz
   // [1-0]: Active=0, Ready=0 for Standby mode
-  IIC_WriteByteToSlave( FXAS21002_ADDR, FXAS21002_CTRL_REG1, 0x00); //设置采样率800Hz
+  IIC_WriteByteToSlave(FXAS21002_ADDR, FXAS21002_CTRL_REG1, 0x00); //设置采样率800Hz
   // write 0000 0000 = 0x00 to CTRL_REG0 to configure range and filters
   // [7-6]: BW[1-0]=00, LPF disabled
   // [5]: SPIW=0 4 wire SPI (irrelevant)
@@ -208,5 +209,3 @@ void Update9AX(short *ax,short *ay,short *az,short *gx,short *gy,short *gz, shor
   *gz = (int16_t)((uint16_t)gyr_buf[4]<<8 | (uint16_t)gyr_buf[5]);
  
 }
-
-

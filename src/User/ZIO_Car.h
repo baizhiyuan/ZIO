@@ -114,6 +114,10 @@ void Part_Choose(void);
 void PART(void);
 void start(void);
 void GCXL(void);
+void Obstacle(void);
+void rotating(void);
+void rotate_pid(_pid_t *pid, int16 actual, int16 set);
+
 
 void PID_Control(_pid_t *pid, int16 actual, int16 set);
 void Pid_Init(void);
@@ -131,6 +135,7 @@ void counter_sum(void);
 void calc_pid(_pid_t *pid);
 
 void track_PID (void);
+void rotate_PID(void);
 
 void diff_speed();
 
