@@ -11,7 +11,7 @@
 #define VL53L0X_REG_RESULT_INTERRUPT_STATUS         0x13
 #define VL53L0X_REG_RESULT_RANGE_STATUS             0x14
 #define VL53_REG_DIS                                0x0096
-#define VL53ADDR                                    0x52    //0x52
+#define VL53ADDR                                    0x52    //0x29
 
 
 #define VL53L1X_IMPLEMENTATION_VER_MAJOR       1
@@ -63,19 +63,6 @@ typedef int8_t VL53L1X_ERROR;
 #define VL53L1_IDENTIFICATION__MODEL_ID                     0x010F
 #define VL53L1_ROI_CONFIG__MODE_ROI_CENTRE_SPAD				0x013E
 
-/**
-  * @brief    测试VL53
-  *
-  * @param    无
-  *
-  * @return   无
-  *
-  * @note     无
-  *
-  * @example  
-  *
-  * @date     2019/4/17 星期三
-  */
 void Test_Vl53(void);
 
 /**
@@ -85,17 +72,9 @@ void Test_Vl53(void);
   * @param    reg：    寄存器
   * @param    length;  长度
   * @param    data：   指向写入数据
-  *
-  * @return   
-  *
-  * @note     
-  *
-  * @example  
-  *
   * @date     2019/4/29 星期一
   */
 void VL53_Write_nByte(uint8_t dev, uint8_t reg, uint8_t length, uint8_t* data);
-
 
 
 /**
@@ -105,13 +84,6 @@ void VL53_Write_nByte(uint8_t dev, uint8_t reg, uint8_t length, uint8_t* data);
   * @param    reg：    寄存器
   * @param    length;  长度
   * @param    data：   指向存放读数据
-  *
-  * @return   
-  *
-  * @note     
-  *
-  * @example  
-  *
   * @date     2019/4/29 星期一
   */
 void VL53_Read_nByte(uint8_t dev, uint8_t reg, uint8_t length, uint8_t* data);

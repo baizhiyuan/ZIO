@@ -23,6 +23,7 @@
 void KEY_Init(void)
 {
     /* 初始化母板上的KEY */
+  // GPIO_PinInit(PTD13, GPI_UP, 1);
    GPIO_PinInit(PTB20, GPI_UP, 1);
    GPIO_PinInit(PTB21, GPI_UP, 1);
    GPIO_PinInit(PTB22, GPI_UP, 1);

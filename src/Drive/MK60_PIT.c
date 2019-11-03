@@ -46,7 +46,7 @@ void PIT_Init(PITn pitn, uint32_t ms)
     PIT_TCTRL(pitn) |= ( PIT_TCTRL_TEN_MASK | PIT_TCTRL_TIE_MASK );   
 
 }
-void PIT_Step(PITn pitn, uint32_t ns)
+void PIT_Step(PITn pitn, uint32_t us)
 {
     //PIT 用的是 Bus Clock 总线频率
 
@@ -57,7 +57,7 @@ void PIT_Step(PITn pitn, uint32_t ns)
     PIT_MCR         &= ~(PIT_MCR_MDIS_MASK | PIT_MCR_FRZ_MASK );   
 
     /* 设置溢出中断时间 */
-    PIT_LDVAL(pitn)  = ns * bus_clk * 1;                                       
+    PIT_LDVAL(pitn)  = us * bus_clk * 1;                                       
 
     /* 清中断标志位 */
     PIT_Flag_Clear(pitn);                                           

@@ -712,13 +712,14 @@ typedef union
 
 
 //九轴读取原始数据测试
-void Test_9AX(void);
+//void Test_9AX(void);
 
 //初始化
 void Init_9AX(void);
 
 //获取九轴原始数据
 void Update9AX(short *ax,short *ay,short *az,short *gx,short *gy,short *gz, short *mx, short *my, short *mz);
+//void Update9AX(short *mx, short *my, short *mz);
 /********************************************************************/
 
 #endif 

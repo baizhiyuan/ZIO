@@ -35,47 +35,37 @@ void Test_Vl53(void)
     LED_Init();
     UART_Init(UART4, 115200);
 	systime.init();
-	printf("\r\nLQ VL53 Test");
-	
-#ifdef LQ_OLED
 	OLED_Init();
     OLED_CLS();
 	OLED_P8x16Str(5,0,"LQ VL53 Test");
-#else
-	TFTSPI_Init(1);                //TFT1.8初始化  0：横屏显示  1：竖屏显示  
-    TFTSPI_CLS(u16BLUE);           //清屏
-	TFTSPI_P8X16Str(0,0,"LQ VL53 Test",u16RED,u16BLUE);
-#endif
 	char txt[16];
-	
 	IIC_Init();       
 
-    uint8_t VL53_STAR = 0x01;
+    uint8_t VL53_STAR = 0x40;
+    uint8_t VL53_STOP = 0x40;
     uint8_t dis_buff[2];
-    uint16_t dis;
+    float dis;
     while(1)
     {
         /* 开始一次测距 */
-        VL53_Write_nByte(VL53ADDR, VL53L0X_REG_SYSRANGE_START, 1, &VL53_STAR);
-        
+        VL53_Write_nByte(VL53ADDR, SYSTEM__MODE_START, 1, &VL53_STAR);
         /* 获取测量数据 */
-		VL53_Read_nByte(VL53ADDR, VL53_REG_DIS, 2, dis_buff);
+	    VL53_Read_nByte(VL53ADDR, PHASECAL_CONFIG__TIMEOUT_MACROP, 2, dis_buff);
 
-        VL53_Write_nByte(VL53ADDR, VL53L0X_REG_SYSRANGE_STOP, 1, &VL53_STAR);
+        VL53_Write_nByte(VL53ADDR, SYSTEM__MODE_START, 1, &VL53_STOP);
         
         /* 转换数据 */
-       // dis = (dis_buff[0]<<8) | (dis_buff[1]);
-       /* if(dis > 8000)
+        dis = (dis_buff[0]<<8) | (dis_buff[1]);
+        /*if(dis > 8000)
         {
             dis = 0;
         }*/
         float distanceInches = dis * 0.0393701;
         float distanceFeet = distanceInches / 12.0;
-		sprintf(txt, "DIS %5d mm",distanceFeet);
+		sprintf(txt, "DIS %5f cm",distanceFeet);
 		OLED_P8x16Str(0,5,txt);
-		delayms(50);
+		delayms(100);
 		LED_Reverse(1);
-    
     }
     
 }
