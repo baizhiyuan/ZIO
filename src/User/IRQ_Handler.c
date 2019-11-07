@@ -80,7 +80,6 @@ uint8 step_last;
 void PIT0_IRQHandler()
 {
     Timer_IQR_handle();
-	LED_Reverse(1);
     PIT_Flag_Clear(PIT0);       //清中断标志位
     /*用户添加所需代码*/  
 }
@@ -94,13 +93,13 @@ void PIT0_IRQHandler()
 void PIT1_IRQHandler()//步进电机中断
 {
 	if (step_flag == 0){
-		step_target = 3500;
+		step_target = 3000;
 		GPIO_PinWrite(PTE28, 0);
 		step_flag = 2;
 		step_last = step_flag;
 	}
 	if(step_flag != step_last){
-		step_target = (step_flag - step_last) * 2200;
+		step_target = (step_flag - step_last) * 2300;
 		if (step_target > 0){
 			GPIO_PinWrite(PTE28, 0);
 		}else if (step_target < 0){
@@ -132,7 +131,6 @@ void PIT2_IRQHandler()//显示屏中断
     Show_IQR_handle();
     PIT_Flag_Clear(PIT2);       //清中断标志位
     /*用户添加所需代码*/
-    pit2_test_flag = 1;
 }
 /*---------------------------------------------------------------
 【函    数】PIT3_Interrupt
@@ -151,20 +149,3 @@ void PIT3_IRQHandler()
 /////////////////////////////////////////////////////////////////
 ///////////////串口中断服务函数/////////////////////////////////
 /////////////////////////////////////////////////////////////////
-
-/*---------------------------------------------------------------
-【函    数】DMA_CH4_Handler
-【功    能】DMA通道4的中断服务函数
-【参    数】无
-【返 回 值】无
-【注意事项】注意进入后要清除中断标志位
-----------------------------------------------------------------*/
-void UART4_RX_TX_IRQHandler(void)
-{
-    if(UART4_S1 & UART_S1_RDRF_MASK)                                     //接收数据寄存器满
-    {
-        //用户需要处理接收数据
-        ANO_DT_Data_Receive_Prepare(UART_GetChar(UART4));
-    }
-    
-}

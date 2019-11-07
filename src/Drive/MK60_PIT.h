@@ -43,7 +43,7 @@ typedef enum PITn
 【注意事项】NVIC_EnableIRQ(PIT0_IRQn);			          //使能PIT0_IRQn的中断
 --------------------------------------------------------------------------------------------------------*/
 void PIT_Init(PITn pitn, uint32_t ms);
-void PIT_Step(PITn pitn, uint32_t ns);
+void PIT_Step(PITn pitn, uint32_t us);
 
 
 /*------------------------------------------------------------------------------------------------------

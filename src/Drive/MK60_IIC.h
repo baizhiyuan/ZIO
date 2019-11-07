@@ -12,7 +12,7 @@
 	 
 #define IIC_SCL    PTE7_OUT  //SCL            2.修改引脚即可修改IIC接口    
 #define IIC_SDA    PTE8_OUT  //SDA	 
-#define READ_SDA   PTE8_IN   //输入SDA  
+#define READ_SDA   PTE8_IN   //输入SDA 
 
 
 /*---------------------------------------------------------------
@@ -35,6 +35,7 @@ uint8_t IIC_ReadByteFromSlave(uint8_t I2C_Addr,uint8_t reg,uint8_t *buf);
 uint8_t IIC_ReadMultByteFromSlave(uint8_t dev, uint8_t reg, uint8_t length, uint8_t *data);
 uint8_t IIC_WriteByteToSlave(uint8_t I2C_Addr,uint8_t reg,uint8_t buf);
 uint8_t IIC_WriteMultByteToSlave(uint8_t dev, uint8_t reg, uint8_t length, uint8_t* data);
+uint8_t IMU_read(uint8_t dev, uint8_t reg, uint8_t length, uint8_t *data);
 
 
 

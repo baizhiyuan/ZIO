@@ -4,7 +4,7 @@
 
 typedef enum DMA_sources
 {
-    /*        禁用通道            */
+    /*        ����ͨ��            */
     Channel_Disabled    = 0,
 
     /*        UART            */
@@ -55,7 +55,7 @@ typedef enum DMA_sources
     DMA_FTM3_CH1            = 37,
     DMA_FTM3_CH2            = 38,
 
-    DMA_FTM1_CH3            = 39,       //怎么会是 FTM1 呢？datasheet是这样的
+    DMA_FTM1_CH3            = 39,       //��ô���� FTM1 �أ�datasheet��������
 
     /*     ADC/DAC/CMP/CMT    */
     DMA_ADC0                = 40,
@@ -94,35 +94,35 @@ typedef enum DMA_sources
 
 typedef enum DMA_PORTx2BUFF_cfg
 {
-    DMA_rising          = 0x01u,            //上升沿触发
-    DMA_falling         = 0x02u,            //下降沿触发
-    DMA_either          = 0x03u,            //跳变沿触发
+    DMA_rising          = 0x01u,            //�����ش���
+    DMA_falling         = 0x02u,            //�½��ش���
+    DMA_either          = 0x03u,            //�����ش���
 
-    //用最高两位标志上拉和下拉
-    DMA_rising_down     = 0x81u,            //上升沿触发，源地址IO端口内部下拉
-    DMA_falling_down    = 0x82u,            //下降沿触发，源地址IO端口内部下拉
-    DMA_either_down     = 0x83u,            //跳变沿触发，源地址IO端口内部下拉
+    //�������λ��־����������
+    DMA_rising_down     = 0x81u,            //�����ش�����Դ��ַIO�˿��ڲ�����
+    DMA_falling_down    = 0x82u,            //�½��ش�����Դ��ַIO�˿��ڲ�����
+    DMA_either_down     = 0x83u,            //�����ش�����Դ��ַIO�˿��ڲ�����
 
-    DMA_rising_up       = 0xc1u,            //上升沿触发，源地址IO端口内部上拉
-    DMA_falling_up      = 0xc2u,            //下降沿触发，源地址IO端口内部上拉
-    DMA_either_up       = 0xc3u,            //跳变沿触发，源地址IO端口内部上拉
+    DMA_rising_up       = 0xc1u,            //�����ش�����Դ��ַIO�˿��ڲ�����
+    DMA_falling_up      = 0xc2u,            //�½��ش�����Դ��ַIO�˿��ڲ�����
+    DMA_either_up       = 0xc3u,            //�����ش�����Դ��ַIO�˿��ڲ�����
 
-    //用位6来标志，传输结束后,目的地址保持不变，不恢复成原来地址
-    DMA_rising_keepon          = 0x21u,     //上升沿触发                      ，目的地址保持不变
-    DMA_falling_keepon         = 0x22u,     //下降沿触发                      ，目的地址保持不变
-    DMA_either_keepon          = 0x23u,     //跳变沿触发                      ，目的地址保持不变
+    //��λ6����־�����������,Ŀ�ĵ�ַ���ֲ��䣬���ָ���ԭ����ַ
+    DMA_rising_keepon          = 0x21u,     //�����ش���                      ��Ŀ�ĵ�ַ���ֲ���
+    DMA_falling_keepon         = 0x22u,     //�½��ش���                      ��Ŀ�ĵ�ַ���ֲ���
+    DMA_either_keepon          = 0x23u,     //�����ش���                      ��Ŀ�ĵ�ַ���ֲ���
 
-    DMA_rising_down_keepon     = 0xA1u,     //上升沿触发，源地址IO端口内部下拉，目的地址保持不变
-    DMA_falling_down_keepon    = 0xA2u,     //下降沿触发，源地址IO端口内部下拉，目的地址保持不变
-    DMA_either_down_keepon     = 0xA3u,     //跳变沿触发，源地址IO端口内部下拉，目的地址保持不变
+    DMA_rising_down_keepon     = 0xA1u,     //�����ش�����Դ��ַIO�˿��ڲ�������Ŀ�ĵ�ַ���ֲ���
+    DMA_falling_down_keepon    = 0xA2u,     //�½��ش�����Դ��ַIO�˿��ڲ�������Ŀ�ĵ�ַ���ֲ���
+    DMA_either_down_keepon     = 0xA3u,     //�����ش�����Դ��ַIO�˿��ڲ�������Ŀ�ĵ�ַ���ֲ���
 
-    DMA_rising_up_keepon       = 0xF1u,     //上升沿触发，源地址IO端口内部上拉，目的地址保持不变
-    DMA_falling_up_keepon      = 0xF2u,     //下降沿触发，源地址IO端口内部上拉，目的地址保持不变
-    DMA_either_up_keepon       = 0xF3u,     //跳变沿触发，源地址IO端口内部上拉，目的地址保持不变
+    DMA_rising_up_keepon       = 0xF1u,     //�����ش�����Դ��ַIO�˿��ڲ�������Ŀ�ĵ�ַ���ֲ���
+    DMA_falling_up_keepon      = 0xF2u,     //�½��ش�����Դ��ַIO�˿��ڲ�������Ŀ�ĵ�ַ���ֲ���
+    DMA_either_up_keepon       = 0xF3u,     //�����ش�����Դ��ַIO�˿��ڲ�������Ŀ�ĵ�ַ���ֲ���
 
 } DMA_PORTx2BUFF_cfg, DMA_Count_cfg;
 
-typedef enum DMA_BYTEn      //DMA每次传输字节数
+typedef enum DMA_BYTEn      //DMAÿ�δ����ֽ���
 {
     DMA_BYTE1 = 0,
     DMA_BYTE2 = 1,
@@ -151,66 +151,66 @@ typedef enum DMA_CHn
     DMA_CH15
 } DMA_CHn;
 
-//定义PTA的8位输入端口  
+//����PTA��8λ����˿�  
 #define PTA_BYTE0_IN   PTA_BASE_PTR->PDIRByte.Byte0
 #define PTA_BYTE1_IN   PTA_BASE_PTR->PDIRByte.Byte1
 #define PTA_BYTE2_IN   PTA_BASE_PTR->PDIRByte.Byte2
 #define PTA_BYTE3_IN   PTA_BASE_PTR->PDIRByte.Byte3
 
-//定义PTB的8位输入端口  
+//����PTB��8λ����˿�  
 #define PTB_BYTE0_IN   PTB_BASE_PTR->PDIRByte.Byte0
 #define PTB_BYTE1_IN   PTB_BASE_PTR->PDIRByte.Byte1
 #define PTB_BYTE2_IN   PTB_BASE_PTR->PDIRByte.Byte2
 #define PTB_BYTE3_IN   PTB_BASE_PTR->PDIRByte.Byte3
 
-//定义PTC的8位输入端口  
+//����PTC��8λ����˿�  
 #define PTC_BYTE0_IN   PTC_BASE_PTR->PDIRByte.Byte0
 #define PTC_BYTE1_IN   PTC_BASE_PTR->PDIRByte.Byte1
 #define PTC_BYTE2_IN   PTC_BASE_PTR->PDIRByte.Byte2
 #define PTC_BYTE3_IN   PTC_BASE_PTR->PDIRByte.Byte3
 
 
-//定义PTD的8位输入端口  
+//����PTD��8λ����˿�  
 #define PTD_BYTE0_IN   PTD_BASE_PTR->PDIRByte.Byte0
 #define PTD_BYTE1_IN   PTD_BASE_PTR->PDIRByte.Byte1
 #define PTD_BYTE2_IN   PTD_BASE_PTR->PDIRByte.Byte2
 #define PTD_BYTE3_IN   PTD_BASE_PTR->PDIRByte.Byte3
 
-//定义PTE的8位输入端口  
+//����PTE��8λ����˿�  
 #define PTE_BYTE0_IN   PTE_BASE_PTR->PDIRByte.Byte0
 #define PTE_BYTE1_IN   PTE_BASE_PTR->PDIRByte.Byte1
 #define PTE_BYTE2_IN   PTE_BASE_PTR->PDIRByte.Byte2
 #define PTE_BYTE3_IN   PTE_BASE_PTR->PDIRByte.Byte3
 
 
-#define  DMA_IRQ_EN(DMA_CHn)    NVIC_EnableIRQ((DMA_CHn) + 0)                         //允许DMA通道传输
-#define  DMA_IRQ_DIS(DMA_CHn)   NVIC_DisableIRQ((DMA_CHn) + 0)                        //禁止DMA通道传输
-#define  DMA_IRQ_CLEAN(DMA_CHn) DMA_INT|=(DMA_INT_INT0_MASK<<DMA_CHn)                 //清除通道传输中断标志位
+#define  DMA_IRQ_EN(DMA_CHn)    NVIC_EnableIRQ((DMA_CHn) + 0)                         //����DMAͨ������
+#define  DMA_IRQ_DIS(DMA_CHn)   NVIC_DisableIRQ((DMA_CHn) + 0)                        //��ֹDMAͨ������
+#define  DMA_IRQ_CLEAN(DMA_CHn) DMA_INT|=(DMA_INT_INT0_MASK<<DMA_CHn)                 //���ͨ�������жϱ�־λ
 
-#define  DMA_EN(DMA_CHn)        DMA_ERQ |= (DMA_ERQ_ERQ0_MASK<<(DMA_CHn))             //使能通道硬件DMA请求
-#define  DMA_DIS(DMA_CHn)       DMA_ERQ &=~(DMA_ERQ_ERQ0_MASK<<(DMA_CHn))             //禁止通道硬件DMA请求
+#define  DMA_EN(DMA_CHn)        DMA_ERQ |= (DMA_ERQ_ERQ0_MASK<<(DMA_CHn))             //ʹ��ͨ��Ӳ��DMA����
+#define  DMA_DIS(DMA_CHn)       DMA_ERQ &=~(DMA_ERQ_ERQ0_MASK<<(DMA_CHn))             //��ֹͨ��Ӳ��DMA����
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**************************************************************************************************************************
-                                                    DMA传输函数
+                                                    DMA���亯��
 **************************************************************************************************************************/
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*************************************************************************
 *
-*  函数名称：DMA_PORTx2BUFF_Init
-*  功能说明：DMA初始化，读取端口数据到内存
-*  参数说明：DMA_CHn              通道号（DMA_CH0 ~ DMA_CH15）
-*            SADDR                源地址( (void * )&PTx_BYTEn_IN 或 (void * )&PTx_WORDn_IN   )
-*            DADDR                目的地址
-*            PTxn                 触发端口
-*            DMA_BYTEn            每次DMA传输字节数
-*            count                一个主循环传输字节数
-*            DMA_PORTx2BUFF_cfg   DMA传输配置
-*  函数返回：无
-*  修改时间：2012-2-20
-*  备    注：
+*  �������ƣ�DMA_PORTx2BUFF_Init
+*  ����˵����DMA��ʼ������ȡ�˿����ݵ��ڴ�
+*  ����˵����DMA_CHn              ͨ���ţ�DMA_CH0 ~ DMA_CH15��
+*            SADDR                Դ��ַ( (void * )&PTx_BYTEn_IN �� (void * )&PTx_WORDn_IN   )
+*            DADDR                Ŀ�ĵ�ַ
+*            PTxn                 �����˿�
+*            DMA_BYTEn            ÿ��DMA�����ֽ���
+*            count                һ����ѭ�������ֽ���
+*            DMA_PORTx2BUFF_cfg   DMA��������
+*  �������أ���
+*  �޸�ʱ�䣺2012-2-20
+*  ��    ע��
 *************************************************************************/
 void DMA_PORTx2BUFF_Init(DMA_CHn CHn,
                          void *SADDR,
@@ -224,12 +224,12 @@ void DMA_PORTx2BUFF_Init(DMA_CHn CHn,
 /*************************************************************** 
 
 * 
-* 函数名称：void DMATransDataStart(uint8_t CHn,uint32_t address) 
-* 功能说明：设置DMA传输的目的地址
-* 参数说明： 
-* 函数返回：无
-* 修改时间：2018年3月27日 
-* 备 注： 
+* �������ƣ�void DMATransDataStart(uint8_t CHn,uint32_t address) 
+* ����˵��������DMA�����Ŀ�ĵ�ַ
+* ����˵���� 
+* �������أ���
+* �޸�ʱ�䣺2018��3��27�� 
+* �� ע�� 
 ***************************************************************/ 
 void DMATransDataStart(uint8_t CHn,uint32_t address);
 
@@ -238,46 +238,46 @@ void DMATransDataStart(uint8_t CHn,uint32_t address);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**************************************************************************************************************************
-                                                    DMA计数函数
+                                                    DMA��������
 **************************************************************************************************************************/
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*************************************************************************
 *
-*  函数名称：DMA_count_Init
-*  功能说明：DMA累加计数初始化
-*  参数说明：DMA_CHn              通道号（DMA_CH0 ~ DMA_CH15）
-*            PTxn                 触发端口
-*            count                累加计数中断值
-*            DMA_Count_cfg        DMA传输配置
-*  函数返回：无
-*  修改时间：2012-1-20
-*  备    注：注意不要和摄像头的DMA通道冲突 比如摄像头的PLCK使用PORTE触发DMA 
-*  备    注：那么DMA计数就不要用PORTE管脚做触发源
+*  �������ƣ�DMA_count_Init
+*  ����˵����DMA�ۼӼ�����ʼ��
+*  ����˵����DMA_CHn              ͨ���ţ�DMA_CH0 ~ DMA_CH15��
+*            PTxn                 �����˿�
+*            count                �ۼӼ����ж�ֵ
+*            DMA_Count_cfg        DMA��������
+*  �������أ���
+*  �޸�ʱ�䣺2012-1-20
+*  ��    ע��ע�ⲻҪ������ͷ��DMAͨ����ͻ ��������ͷ��PLCKʹ��PORTE����DMA 
+*  ��    ע����ôDMA�����Ͳ�Ҫ��PORTE�ܽ�������Դ
 *************************************************************************/
 void DMA_Count_Init(DMA_CHn CHn, PTXn_e ptxn, u32 count, DMA_PORTx2BUFF_cfg cfg);
 
 
 /**************************************************************************                            
 *
-*  函数名称：DMA_count_get
-*  功能说明：返回累加计数值
-*  参数说明：DMA_CHn              通道号（DMA_CH0 ~ DMA_CH15）
-*  函数返回：累加计数值
-*  修改时间：2012-3-320
-*  备    注：
+*  �������ƣ�DMA_count_get
+*  ����˵���������ۼӼ���ֵ
+*  ����˵����DMA_CHn              ͨ���ţ�DMA_CH0 ~ DMA_CH15��
+*  �������أ��ۼӼ���ֵ
+*  �޸�ʱ�䣺2012-3-320
+*  ��    ע��
 *************************************************************************/
 u32  DMA_Count_Get(DMA_CHn CHn);
 
 
 /**************************************************************************                            
 *
-*  函数名称：DMA_Count_Reset
-*  功能说明：清楚累加计数值
-*  参数说明：DMA_CHn              通道号（DMA_CH0 ~ DMA_CH15）
-*  函数返回：无
-*  修改时间：2012-3-320
-*  备    注：
+*  �������ƣ�DMA_Count_Reset
+*  ����˵��������ۼӼ���ֵ
+*  ����˵����DMA_CHn              ͨ���ţ�DMA_CH0 ~ DMA_CH15��
+*  �������أ���
+*  �޸�ʱ�䣺2012-3-320
+*  ��    ע��
 *************************************************************************/
 void DMA_Count_Reset(DMA_CHn CHn);
 
