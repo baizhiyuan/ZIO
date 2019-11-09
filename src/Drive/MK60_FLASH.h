@@ -1,44 +1,44 @@
 #ifndef _MK60_FLASH_H_
 #define _MK60_FLASH_H_
 
-//k66åŒ…å«1024Kçš„ç¨‹åºFlash  
-//1024Kçš„ç¨‹åºFlashåˆ†ä¸º256ä¸ªæ‰‡åŒºï¼Œæ¯ä¸ªæ‰‡åŒº4Kå¤§å°
-//    sectorï¼ˆ4Kï¼‰ä¸ºæ“¦é™¤æœ€å°å•ä½
-//    é•¿å­—ï¼ˆ32bï¼‰ä¸ºå†™çš„æœ€å°å•ä½
+//k66°üº¬1024KµÄ³ÌĞòFlash  
+//1024KµÄ³ÌĞòFlash·ÖÎª256¸öÉÈÇø£¬Ã¿¸öÉÈÇø4K´óĞ¡
+//    sector£¨4K£©Îª²Á³ı×îĞ¡µ¥Î»
+//    ³¤×Ö£¨32b£©ÎªĞ´µÄ×îĞ¡µ¥Î»
 
 #include "common.h"
 
 #define PROGRAM_CMD      			PGM8
 #define SECTOR_SIZE     			(4096)
-#define FLASH_SECTOR_NUM        	(256)                   //æ‰‡åŒºæ•°
-#define FLASH_ALIGN_ADDR        	4                       //åœ°å€å¯¹é½æ•´æ•°å€
-typedef uint32                  	FLASH_WRITE_TYPE;       //flash_write å‡½æ•°å†™å…¥ çš„æ•°æ®ç±»å‹
+#define FLASH_SECTOR_NUM        	(256)                   //ÉÈÇøÊı
+#define FLASH_ALIGN_ADDR        	4                       //µØÖ·¶ÔÆëÕûÊı±¶
+typedef uint32                  	FLASH_WRITE_TYPE;       //flash_write º¯ÊıĞ´Èë µÄÊı¾İÀàĞÍ
 
 
 
 
 /*!
- *  @brief      ä½¿ç”¨å®å®šä¹‰å¯¹flashè¿›è¡Œæ•°æ®è¯»å–
- *  @param      sectorNo 		å€’æ•°æ‰‡åŒºå·ï¼ˆK66å®é™…ä½¿ç”¨1~256ï¼‰
- *  @param      offset	 		å…¥æ‰‡åŒºå†…éƒ¨åç§»åœ°å€ï¼ˆ0~4095 ä¸­ 4çš„å€æ•°ï¼‰
- *  @param      type		 	è¯»å–çš„æ•°æ®ç±»å‹
- *  @return     				è¿”å›ç»™å®šåœ°å€çš„æ•°æ®
- *  @notice     æ‰‡åŒºä¸è¦ä½¿ç”¨å‰é¢çš„  ç¨‹åºå­˜æ”¾åœ¨é å‰çš„æ‰‡åŒºï¼Œæ‰€ä»¥è¿™é‡Œçš„sector_numæ˜¯å€’æ•°çš„
- *  Sample usage:               FLASH_Read(1,0,uint32);//è¯»å–å€’æ•°ç¬¬ä¸€ä¸ªæ‰‡åŒºåç§»0æ•°æ®ç±»å‹ä¸ºuint32
+ *  @brief      Ê¹ÓÃºê¶¨Òå¶Ôflash½øĞĞÊı¾İ¶ÁÈ¡
+ *  @param      sectorNo 		µ¹ÊıÉÈÇøºÅ£¨K66Êµ¼ÊÊ¹ÓÃ1~256£©
+ *  @param      offset	 		ÈëÉÈÇøÄÚ²¿Æ«ÒÆµØÖ·£¨0~4095 ÖĞ 4µÄ±¶Êı£©
+ *  @param      type		 	¶ÁÈ¡µÄÊı¾İÀàĞÍ
+ *  @return     				·µ»Ø¸ø¶¨µØÖ·µÄÊı¾İ
+ *  @notice     ÉÈÇø²»ÒªÊ¹ÓÃÇ°ÃæµÄ  ³ÌĞò´æ·ÅÔÚ¿¿Ç°µÄÉÈÇø£¬ËùÒÔÕâÀïµÄsector_numÊÇµ¹ÊıµÄ
+ *  Sample usage:               FLASH_Read(1,0,uint32);//¶ÁÈ¡µ¹ÊıµÚÒ»¸öÉÈÇøÆ«ÒÆ0Êı¾İÀàĞÍÎªuint32
  */
 #define     FLASH_Read(sectorNo,offset,type)        (*(type *)((uint32_t)(((FLASH_SECTOR_NUM - sectorNo)*SECTOR_SIZE) + (offset)))) 
 
 /*!
- *  @brief      Flash åˆå§‹åŒ–   
- *  @return     æ— 
- *  @notice     ä½¿ç”¨Flashæ—¶ä¸€å®šè®°å¾—åˆå§‹åŒ–
+ *  @brief      Flash ³õÊ¼»¯   
+ *  @return     ÎŞ
+ *  @notice     Ê¹ÓÃFlashÊ±Ò»¶¨¼ÇµÃ³õÊ¼»¯
  *  Sample usage:  
  */
 void FLASH_Init(void);
 
 /*!
- *  @brief      è·å–å•ç‰‡æœºflashä¿¡æ¯
- *  @return     æ‰‡åŒºå¤§å°
+ *  @brief      »ñÈ¡µ¥Æ¬»úflashĞÅÏ¢
+ *  @return     ÉÈÇø´óĞ¡
  *  @notice     
  *  Sample usage:   FLASH_GetSectorSize();
  */
@@ -46,9 +46,9 @@ uint32 FLASH_GetSectorSize(void);
 
 
 /*!
- *  @brief      æ“¦å‡ºæ‰‡åŒº
- *  @param      sectorNo 		å€’æ•°æ‰‡åŒºå·ï¼ˆK66å®é™…ä½¿ç”¨1~256ï¼‰
- *  @return     è¿”å›1æ“¦é™¤å¤±è´¥ï¼Œè¿”å›0æ“¦é™¤æˆåŠŸ
+ *  @brief      ²Á³öÉÈÇø
+ *  @param      sectorNo 		µ¹ÊıÉÈÇøºÅ£¨K66Êµ¼ÊÊ¹ÓÃ1~256£©
+ *  @return     ·µ»Ø1²Á³ıÊ§°Ü£¬·µ»Ø0²Á³ı³É¹¦
  *  @notice     
  *  Sample usage: uint32 dat = FLASH_GetSectorSize(10);
  */
@@ -56,14 +56,14 @@ uint8 FLASH_EraseSector(uint32 SectorNum);
 
 
 /*!
- *  @brief      æŠŠæ•°æ®å†™å…¥æ‰‡åŒº
- *  @param      sectorNo 		å€’æ•°æ‰‡åŒºå·ï¼ˆK66å®é™…ä½¿ç”¨1~256ï¼‰
- *  @param      offset	 		å…¥æ‰‡åŒºå†…éƒ¨åç§»åœ°å€ï¼ˆ0~4095 ä¸­ 4çš„å€æ•°ï¼‰
- *  @param      buf		 	    æ•°æ®é¦–åœ°å€
- *  @param      len		 	    æ•°æ®é•¿åº¦
- *  @return     				è¿”å›ç»™å®šåœ°å€çš„æ•°æ®
- *  @notice     æ‰‡åŒºä¸è¦ä½¿ç”¨å‰é¢çš„  ç¨‹åºå­˜æ”¾åœ¨é å‰çš„æ‰‡åŒºï¼Œæ‰€ä»¥è¿™é‡Œçš„sector_numæ˜¯å€’æ•°çš„
- *  Sample usage:               FLASH_Read(1,0,uint32);//è¯»å–å€’æ•°ç¬¬ä¸€ä¸ªæ‰‡åŒºåç§»0æ•°æ®ç±»å‹ä¸ºuint32
+ *  @brief      °ÑÊı¾İĞ´ÈëÉÈÇø
+ *  @param      sectorNo 		µ¹ÊıÉÈÇøºÅ£¨K66Êµ¼ÊÊ¹ÓÃ1~256£©
+ *  @param      offset	 		ÈëÉÈÇøÄÚ²¿Æ«ÒÆµØÖ·£¨0~4095 ÖĞ 4µÄ±¶Êı£©
+ *  @param      buf		 	    Êı¾İÊ×µØÖ·
+ *  @param      len		 	    Êı¾İ³¤¶È
+ *  @return     				·µ»Ø¸ø¶¨µØÖ·µÄÊı¾İ
+ *  @notice     ÉÈÇø²»ÒªÊ¹ÓÃÇ°ÃæµÄ  ³ÌĞò´æ·ÅÔÚ¿¿Ç°µÄÉÈÇø£¬ËùÒÔÕâÀïµÄsector_numÊÇµ¹ÊıµÄ
+ *  Sample usage:               FLASH_Read(1,0,uint32);//¶ÁÈ¡µ¹ÊıµÚÒ»¸öÉÈÇøÆ«ÒÆ0Êı¾İÀàĞÍÎªuint32
  */
 uint8 FLASH_WriteBuf(uint32 SectorNum, const uint8 *buf, uint32 len, uint32 offset);
 

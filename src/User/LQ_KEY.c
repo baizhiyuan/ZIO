@@ -23,6 +23,7 @@
 void KEY_Init(void)
 {
     /* 初始化母板上的KEY */
+   GPIO_PinInit(PTD15, GPI, 1);
    GPIO_PinInit(PTB20, GPI_UP, 1);
    GPIO_PinInit(PTB21, GPI_UP, 1);
    GPIO_PinInit(PTB22, GPI_UP, 1);
@@ -45,7 +46,7 @@ uint8_t KEY_Read(uint8_t mode)
     {
       key_up=1;      //支持连按
     }
-    if(key_up && (GPIO_PinRead(PTB20)==0 || GPIO_PinRead(PTB21)==0) || GPIO_PinRead(PTB22)==0)
+    if(key_up && (GPIO_PinRead(PTB20)==0 || GPIO_PinRead(PTB21)==0 || GPIO_PinRead(PTB22)==0)|| GPIO_PinRead(PTD15)==0)
     {
       delayms(100);   //消抖
       key_up=0;
@@ -63,9 +64,14 @@ uint8_t KEY_Read(uint8_t mode)
       {
           return 3;    
       }
+
+      else if(GPIO_PinRead(PTD15)==0) 
+      {
+          return 4;    
+      }
       
     }
-    if(GPIO_PinRead(PTB20)==1 && GPIO_PinRead(PTB21)==1 && GPIO_PinRead(PTB22)==1) 
+    if(GPIO_PinRead(PTB20)==1 && GPIO_PinRead(PTB21)==1 && GPIO_PinRead(PTB22)==1 && GPIO_PinRead(PTD15)==1) 
     {
      key_up=1;   
     }
