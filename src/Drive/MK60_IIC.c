@@ -285,6 +285,35 @@ uint8_t IIC_ReadMultByteFromSlave(uint8_t dev, uint8_t reg, uint8_t length, uint
     return 0;
 }
 
+uint8_t IMU_read(uint8_t dev, uint8_t reg, uint8_t length, uint8_t *data)
+{
+    uint8_t count = 0;
+	uint8_t temp;
+	IIC_Start();
+	IIC_SendByte(dev<<1); //发送从机地址
+	if(IIC_WaitAck())
+	{
+		IIC_Stop(); 
+		return 1; //从机地址写入失败
+	}
+	IIC_SendByte(reg); //发送寄存器地址
+    IIC_WaitAck();	  
+	IIC_Start();
+	IIC_SendByte(dev<<1|1); //进入接收模式	
+	IIC_WaitAck();
+    for(count=0;count<length;count++)
+	{
+		if(count!=(length-1))
+            temp = IIC_ReadByte(1); //带ACK的读数据
+		else  
+            temp = IIC_ReadByte(0); //最后一个字节NACK
+        
+		data[count] = temp;
+	}
+    IIC_Stop(); //产生一个停止条件
+    //return count;
+    return 0;
+}
 /******************************************************************************
 *函  数：uint8_t IICwriteBytes(uint8_t dev, uint8_t reg, uint8_t length, uint8_t* data)
 *功　能：将多个字节写入指定设备 指定寄存器
@@ -295,7 +324,7 @@ length  要写的字节数
 *返回值：1成功 0失败
 *备  注：无
 *******************************************************************************/ 
-uint8_t IIC_WriteMultByteToSlave(uint8_t dev, uint8_t reg, uint8_t length, uint8_t* data)
+uint8_t IIC_WriteMultByteToSlave(uint8_t dev, uint8_t reg, uint8_t length, uint8_t *data)
 {
     
  	uint8_t count = 0;

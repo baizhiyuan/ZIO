@@ -1,21 +1,21 @@
-/******************** LQ_K60_å‡½æ•°åº“ v1.0 ********************
- * æ–‡ä»¶å           ï¼šPLL.c
- * åŠŸèƒ½             ï¼šè®¾ç½®å·¥ä½œæ—¶é’Ÿæ¨¡å¼ï¼Œé”ç›¸çŽ¯ï¼Œå³è¶…é¢‘
- * å¤‡æ³¨             ï¼šå®˜æ–¹ä¾‹ç¨‹ä¸Šä¿®æ”¹
- * æ—¥æœŸ             ï¼š2015-10-16
- * å®žéªŒå¹³å°         ï¼šé¾™ä¸˜ k60 vgæ¿ 
- * ä½œè€…             ï¼šé¾™ä¸˜æŠ€æœ¯ 006
- * æ·˜å®åº—           ï¼šhttps://longqiu.taobao.com
- * é¾™ä¸˜æ™ºèƒ½è½¦è®¨è®ºç¾¤ ï¼š202949437
+/******************** LQ_K60_º¯Êý¿â v1.0 ********************
+ * ÎÄ¼þÃû           £ºPLL.c
+ * ¹¦ÄÜ             £ºÉèÖÃ¹¤×÷Ê±ÖÓÄ£Ê½£¬ËøÏà»·£¬¼´³¬Æµ
+ * ±¸×¢             £º¹Ù·½Àý³ÌÉÏÐÞ¸Ä
+ * ÈÕÆÚ             £º2015-10-16
+ * ÊµÑéÆ½Ì¨         £ºÁúÇð k60 vg°å 
+ * ×÷Õß             £ºÁúÇð¼¼Êõ 006
+ * ÌÔ±¦µê           £ºhttps://longqiu.taobao.com
+ * ÁúÇðÖÇÄÜ³µÌÖÂÛÈº £º202949437
 *************************************************************/
 
 #ifndef __PLL_H__
 #define __PLL_H__
 
-extern uint8_t core_clk;//å•ä½MHZ
-extern uint8_t bus_clk; //å•ä½MHZ
+extern uint8_t core_clk;//µ¥Î»MHZ
+extern uint8_t bus_clk; //µ¥Î»MHZ
 
-//PLLå‚æ•°
+//PLL²ÎÊý
 typedef enum clk_option
 {
     PLLUNULL ,
@@ -34,13 +34,13 @@ typedef enum clk_option
     PLL225   ,
     PLL230   ,
     PLL235   ,
-    PLL237_5 , //å®žé™…ä¸º237.5M
+    PLL237_5 , //Êµ¼ÊÎª237.5M
 } clk_option;
 
 
 
-/*********************** PLLåŠŸèƒ½å‡½æ•° **************************/
-void PLL_Init(clk_option);     //é”ç›¸çŽ¯åˆå§‹åŒ–
+/*********************** PLL¹¦ÄÜº¯Êý **************************/
+void PLL_Init(clk_option);     //ËøÏà»·³õÊ¼»¯
 
 
 

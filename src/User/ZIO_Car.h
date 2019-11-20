@@ -9,6 +9,71 @@ typedef struct
 	float kp,ki,kd;
 	float result;
 }_pid_t;
+
+void Motor_Init(void);
+void Infrared_Init(void);
+void STEP_Init(void);
+void Sys_init_all(void);
+
+void Uart_Init(void);
+void Timer_Init(void);
+void Timer_IQR_handle();
+void Show_IQR_handle();
+void Part_Choose(void);
+void PART(void);
+void PART_all(void);
+void start(void);
+void GCXL(void);
+void Obstacle(void);
+void rotating(void);
+void rota_filter(void);
+void rotate_pid(_pid_t *pid, int16 actual, int16 set);
+void run_straight(void);
+void turn_left(void);
+void turn_right(void);
+void Positioning(void);
+void Positioning_1(void);
+void Positioning_2(void);
+void Positioning_3(void);
+void Pos_flags(int16 tarnum, int16 tarspeed);
+void Pos_flag(void);
+void Pos_flag_1(void);
+void Pos_flag_11(void);
+void Pos_flag_2(void);
+void Pos_flag_3(void);
+void Pos_flag_4(void);
+void Pos_flag_5(void);
+void Posit(int16 tarnum, int16 tarspeed);
+void PID_Control(_pid_t *pid, int16 actual, int16 set);
+void Pid_Init(void);
+void Pwm_Init(void);
+
+void Pos_back(int16 tarnum);
+
+void Left_front_pwm_set(int16 Left_frontvalue);
+void Right_front_pwm_set(int16 Right_frontvalue);
+void Left_rear_pwm_set(int16 Left_rearvalue);
+void Right_rear_pwm_set(int16 Right_rearvalue);
+void All_pwm_set(int16 Left_frontvalue, int16 Right_frontvalue, int16 Left_rearvalue, int16 Right_rearvalue);
+
+void ADC_turn(void);
+void read_lamp_values(void);
+void counter_sum(void);
+void counter_sum_1(void);
+void calc_pid(_pid_t *pid);
+
+void track_PID (void);
+void rotate_PID(int16_t MAG_Tar);
+
+void diff_speed();
+void Num_IQR_handle();
+void track_houtui(void);
+
+void complete(void);
+void Posit_stop(int16 tarnum, int16 tarspeed);
+void speed_control(void);
+void zhuanwan(void);
+#endif
 /*
 #define M_PI 3.1415926
 #define _fCut   20                     //低通滤波  截止频率
@@ -99,41 +164,3 @@ _pid_param_t  Imu_pid =               //角度PID参数结构体  用于直立�
 
 };
 void Control_Motor(int16_t velocity_left, int16_t velocity_right);*/
-
-
-void Motor_Init(void);
-void Infrared_Init(void);
-void STEP_Init(void);
-void Sys_init_all(void);
-
-void Uart_Init(void);
-void Timer_Init(void);
-void Timer_IQR_handle();
-void Show_IQR_handle();
-void Part_Choose(void);
-void PART(void);
-void start(void);
-void GCXL(void);
-
-void PID_Control(_pid_t *pid, int16 actual, int16 set);
-void Pid_Init(void);
-void Pwm_Init(void);
-
-void Left_front_pwm_set(int16 Left_frontvalue);
-void Right_front_pwm_set(int16 Right_frontvalue);
-void Left_rear_pwm_set(int16 Left_rearvalue);
-void Right_rear_pwm_set(int16 Right_rearvalue);
-void All_pwm_set(int16 Left_frontvalue, int16 Right_frontvalue, int16 Left_rearvalue, int16 Right_rearvalue);
-
-void ADC_turn(void);
-void read_lamp_values(void);
-void counter_sum(void);
-void calc_pid(_pid_t *pid);
-
-void track_PID (void);
-
-void diff_speed();
-
-
-
-#endif
