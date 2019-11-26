@@ -1,28 +1,28 @@
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-¡¾Æ½    Ì¨¡¿ÁúÇñi.MX RT1052ºËĞÄ°å-ÖÇÄÜ³µ°å
-¡¾±à    Ğ´¡¿CHIUSIR
-¡¾E-mail  ¡¿chiusir@163.com
-¡¾Èí¼ş°æ±¾¡¿V1.0
-¡¾×îºó¸üĞÂ¡¿2018Äê2ÔÂ1ÈÕ
-¡¾Ïà¹ØĞÅÏ¢²Î¿¼ÏÂÁĞµØÖ·¡¿
-¡¾Íø    Õ¾¡¿http://www.lqist.cn
-¡¾ÌÔ±¦µêÆÌ¡¿http://shop36265907.taobao.com
+ã€å¹³    å°ã€‘é¾™é‚±i.MX RT1052æ ¸å¿ƒæ¿-æ™ºèƒ½è½¦æ¿
+ã€ç¼–    å†™ã€‘CHIUSIR
+ã€E-mail  ã€‘chiusir@163.com
+ã€è½¯ä»¶ç‰ˆæœ¬ã€‘V1.0
+ã€æœ€åæ›´æ–°ã€‘2018å¹´2æœˆ1æ—¥
+ã€ç›¸å…³ä¿¡æ¯å‚è€ƒä¸‹åˆ—åœ°å€ã€‘
+ã€ç½‘    ç«™ã€‘http://www.lqist.cn
+ã€æ·˜å®åº—é“ºã€‘http://shop36265907.taobao.com
 ------------------------------------------------
-¡¾dev.env.¡¿IAR8.20.1¼°ÒÔÉÏ°æ±¾
-¡¾Target ¡¿ i.MX RT1052
-¡¾Crystal¡¿ 24.000Mhz
-¡¾ARM PLL¡¿ 1200MHz
-¡¾SYS PLL¡¿ 528MHz
-¡¾USB PLL¡¿ 480MHz
+ã€dev.env.ã€‘IAR8.20.1åŠä»¥ä¸Šç‰ˆæœ¬
+ã€Target ã€‘ i.MX RT1052
+ã€Crystalã€‘ 24.000Mhz
+ã€ARM PLLã€‘ 1200MHz
+ã€SYS PLLã€‘ 528MHz
+ã€USB PLLã€‘ 480MHz
 QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 
 #ifndef __LQ_SGP18T_TFTSPI_H__
 #define __LQ_SGP18T_TFTSPI_H__	
 #include "include.h" 
 
-/*******************½Ó¿Ú¶¨Òå******************************/
-#define APP_LCD_WIDTH  LCD_WIDTH//Òº¾§ÆÁ¿í¶È
-#define APP_LCD_HEIGHT LCD_HEIGHT//Òº¾§ÆÁ¸ß¶È
+/*******************æ¥å£å®šä¹‰******************************/
+#define APP_LCD_WIDTH  LCD_WIDTH//æ¶²æ™¶å±å®½åº¦
+#define APP_LCD_HEIGHT LCD_HEIGHT//æ¶²æ™¶å±é«˜åº¦
 
 #define TFT18W        162
 #define TFT18H        132
@@ -32,25 +32,25 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #define	u16BLUE		0x001f
 #define	u16PURPLE	0xf81f
 #define	u16YELLOW	0xffe0
-#define	u16CYAN		0x07ff 		//À¶ÂÌÉ«
+#define	u16CYAN		0x07ff 		//è“ç»¿è‰²
 #define	u16ORANGE	0xfc08
 #define	u16BLACK	0x0000
 #define	u16WHITE	0xffff
 
 
-/*****************Ë½ÓĞº¯ÊıÉùÃû*********************************/							
-extern void TFTSPI_Init(uint8_t type);									 //LCD³õÊ¼»¯  0:ºáÆÁ  1£ºÊúÆÁ
-extern void TFTSPI_Write_Cmd(uint8_t cmd);						         //·¢ËÍ¿ØÖÆ×Ö
-extern void TFTSPI_Write_Byte(uint8_t dat);						         //·¢ËÍÊı¾İ²ÎÊı
-extern void TFTSPI_Write_Word(uint16_t dat);						         //·¢ËÍÏñËØÏÔÊ¾²ÎÊı
-extern void TFTSPI_Addr_Rst(void);							         //DDRAMµØÖ·ÖØÖÃ
-extern void TFTSPI_Set_Pos(uint8_t xs,uint8_t ys,uint8_t xe,uint8_t ye);	                         //¶¨Î»ÏÔÊ¾ÏñËØÎ»ÖÃ
-extern void TFTSPI_CLS(uint16_t color);					                         //È«ÆÁÏÔÊ¾Ä³ÖÖÑÕÉ«
-extern void TFTSPI_Draw_Part(uint8_t xs,uint8_t ys,uint8_t xe,uint8_t ye,uint16_t color_dat);     //Ìî³ä¾ØĞÎÇøÓò£¬ĞĞÆğÊ¼¡¢ÖÕÖ¹×ø±ê£¬ÁĞÆğÊ¼¡¢ÖÕÖ¹×ø±ê£¬ÑÕÉ«
-extern void TFTSPI_Draw_Line(uint8_t xs,uint8_t ys,uint8_t xe,uint8_t ye,uint16_t color_dat);     //»­Ïß£¬ĞĞÆğÊ¼¡¢ÖÕÖ¹×ø±ê£¬ÁĞÆğÊ¼¡¢ÖÕÖ¹×ø±ê£¬ÑÕÉ«
-extern void TFTSPI_Draw_Rectangle(uint8_t xs,uint8_t ys,uint8_t xe,uint8_t ye,uint16_t color_dat);//»­¾ØĞÎ±ß¿ò£¬ĞĞÆğÊ¼¡¢ÖÕÖ¹×ø±ê£¬ÁĞÆğÊ¼¡¢ÖÕÖ¹×ø±ê£¬ÑÕÉ«
-extern void TFTSPI_Draw_Circle(uint8_t x,uint8_t y,uint8_t r,uint16_t color_dat);                 //»­Ô²ĞÎ±ß¿ò£¬Ô²ĞÄºá×ø±ê¡¢×İ×ø±ê£¬°ë¾¶£¬ÑÕÉ«
-extern void TFTSPI_Draw_Dot(uint8_t x,uint8_t y,uint16_t color_dat);	                         //»­µã£¬ºá×ø±ê£¬×İ×ø±ê£¬ÑÕÉ«
+/*****************ç§æœ‰å‡½æ•°å£°å*********************************/							
+extern void TFTSPI_Init(uint8_t type);									 //LCDåˆå§‹åŒ–  0:æ¨ªå±  1ï¼šç«–å±
+extern void TFTSPI_Write_Cmd(uint8_t cmd);						         //å‘é€æ§åˆ¶å­—
+extern void TFTSPI_Write_Byte(uint8_t dat);						         //å‘é€æ•°æ®å‚æ•°
+extern void TFTSPI_Write_Word(uint16_t dat);						         //å‘é€åƒç´ æ˜¾ç¤ºå‚æ•°
+extern void TFTSPI_Addr_Rst(void);							         //DDRAMåœ°å€é‡ç½®
+extern void TFTSPI_Set_Pos(uint8_t xs,uint8_t ys,uint8_t xe,uint8_t ye);	                         //å®šä½æ˜¾ç¤ºåƒç´ ä½ç½®
+extern void TFTSPI_CLS(uint16_t color);					                         //å…¨å±æ˜¾ç¤ºæŸç§é¢œè‰²
+extern void TFTSPI_Draw_Part(uint8_t xs,uint8_t ys,uint8_t xe,uint8_t ye,uint16_t color_dat);     //å¡«å……çŸ©å½¢åŒºåŸŸï¼Œè¡Œèµ·å§‹ã€ç»ˆæ­¢åæ ‡ï¼Œåˆ—èµ·å§‹ã€ç»ˆæ­¢åæ ‡ï¼Œé¢œè‰²
+extern void TFTSPI_Draw_Line(uint8_t xs,uint8_t ys,uint8_t xe,uint8_t ye,uint16_t color_dat);     //ç”»çº¿ï¼Œè¡Œèµ·å§‹ã€ç»ˆæ­¢åæ ‡ï¼Œåˆ—èµ·å§‹ã€ç»ˆæ­¢åæ ‡ï¼Œé¢œè‰²
+extern void TFTSPI_Draw_Rectangle(uint8_t xs,uint8_t ys,uint8_t xe,uint8_t ye,uint16_t color_dat);//ç”»çŸ©å½¢è¾¹æ¡†ï¼Œè¡Œèµ·å§‹ã€ç»ˆæ­¢åæ ‡ï¼Œåˆ—èµ·å§‹ã€ç»ˆæ­¢åæ ‡ï¼Œé¢œè‰²
+extern void TFTSPI_Draw_Circle(uint8_t x,uint8_t y,uint8_t r,uint16_t color_dat);                 //ç”»åœ†å½¢è¾¹æ¡†ï¼Œåœ†å¿ƒæ¨ªåæ ‡ã€çºµåæ ‡ï¼ŒåŠå¾„ï¼Œé¢œè‰²
+extern void TFTSPI_Draw_Dot(uint8_t x,uint8_t y,uint16_t color_dat);	                         //ç”»ç‚¹ï¼Œæ¨ªåæ ‡ï¼Œçºµåæ ‡ï¼Œé¢œè‰²
 extern void TFTSPI_P8X16(uint8_t x, uint8_t y, uint8_t c_dat,uint16_t word_color,uint16_t back_color);
 extern void TFTSPI_P8X16Str(uint8_t x, uint8_t y, char *s_dat,uint16_t word_color,uint16_t back_color);
 extern void TFTSPI_P6X8(uint8_t x, uint8_t y, uint8_t c_dat,uint16_t word_color,uint16_t back_color);
