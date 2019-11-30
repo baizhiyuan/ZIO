@@ -319,7 +319,6 @@ void UART_PutBuff(UART_Type * uratn, uint8_t *buff, uint32 len)
 }
 
 
-
 //-------------------------------------------------------------------------*
 //函数名: UART_PutStr                                                        
 //功  能: 发送字符串(遇 NULL 停止发送)                                                       

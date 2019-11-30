@@ -153,7 +153,7 @@ void Init_9AX(void)
   // [2]: HPF_EN=0 disable HPF
   // [1-0]: FS[1-0]=00 for 1600dps (TBD CHANGE TO 2000dps when final trimmed parts available)
   IIC_WriteByteToSlave(FXAS21002_ADDR, FXAS21002_CTRL_REG0, 0x00);   //陀螺仪传感器,±2000dps     
-  delayms(100);  
+  PIT_Delayms(PIT3, 100);
   // write 0000 0001 = 0x01 to CTRL_REG1 to configure 800Hz ODR and enter Active mode
   // [7]: ZR_cond=0
   // [6]: RST=0
@@ -163,7 +163,7 @@ void Init_9AX(void)
   IIC_WriteByteToSlave(FXAS21002_ADDR, FXAS21002_CTRL_REG1, 0x03);   //陀螺仪工作
   
   //////FXOS8700///////////////////////////////////////////////////////////////////////////////////////////
-  delayms(100);    
+  PIT_Delayms(PIT3, 100);
   uint8_t val;
   IIC_ReadByteFromSlave(FXOS8700_ADDR, FXOS8700_CTRL_REG1, &val);  //读CTRL1寄存器
   IIC_WriteByteToSlave(FXOS8700_ADDR, FXOS8700_CTRL_REG1, val & (uint8_t)~ACTIVE_MASK);   //使8700处于待机模式
@@ -173,7 +173,7 @@ void Init_9AX(void)
   IIC_WriteByteToSlave(FXOS8700_ADDR, M_CTRL_REG2, M_HYB_AUTOINC_MASK); 
   IIC_WriteByteToSlave(FXOS8700_ADDR, XYZ_DATA_CFG_REG, FULL_SCALE_4G);       //加计 正负4g模式
   IIC_WriteByteToSlave(FXOS8700_ADDR, FXOS8700_CTRL_REG1, (HYB_DATA_RATE_200HZ | ACTIVE_MASK));       //设置数据输出频率 200hz 并且激活FX8700
-  delayms(10);
+  PIT_Delayms(PIT3, 10);
 }
 
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
