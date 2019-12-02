@@ -1,102 +1,102 @@
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-¡¾Æ½    Ì¨¡¿±±¾©ÁúÇñÖÇÄÜ¿Æ¼¼MK66FX1M0VLQ18ºËÐÄ°å
-¡¾±à    Ð´¡¿CHIUSIR
-¡¾±¸    ×¢¡¿
-¡¾Èí¼þ°æ±¾¡¿V1.0
-¡¾×îºó¸üÐÂ¡¿2018Äê4ÔÂ23ÈÕ
-¡¾Ïà¹ØÐÅÏ¢²Î¿¼ÏÂÁÐµØÖ·¡¿
-¡¾Íø    Õ¾¡¿http://www.lqist.cn
-¡¾ÌÔ±¦µêÆÌ¡¿http://shop36265907.taobao.com
-¡¾½»Á÷ÓÊÏä¡¿chiusir@163.com
+ã€å¹³    å°ã€‘åŒ—äº¬é¾™é‚±æ™ºèƒ½ç§‘æŠ€MK66FX1M0VLQ18æ ¸å¿ƒæ¿
+ã€ç¼–    å†™ã€‘CHIUSIR
+ã€å¤‡    æ³¨ã€‘
+ã€è½¯ä»¶ç‰ˆæœ¬ã€‘V1.0
+ã€æœ€åŽæ›´æ–°ã€‘2018å¹´4æœˆ23æ—¥
+ã€ç›¸å…³ä¿¡æ¯å‚è€ƒä¸‹åˆ—åœ°å€ã€‘
+ã€ç½‘    ç«™ã€‘http://www.lqist.cn
+ã€æ·˜å®åº—é“ºã€‘http://shop36265907.taobao.com
+ã€äº¤æµé‚®ç®±ã€‘chiusir@163.com
 QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #ifndef __LQ_OV7725_H_
 #define __LQ_OV7725_H_
 #include "common.h" 
 #include "MK60_GPIO.h"
 
-#define OV7725_IMAGEH  240  //ÐÐ HEIGHT ´ý²É¼¯ÉãÏñÍ·Í¼Ïñ¸ß¶ÈÐÐÊý
-#define OV7725_IMAGEW  320  //ÁÐ WIDTH  ´ý²É¼¯ÉãÏñÍ·Í¼Ïñ¿í¶ÈÁÐÊý 
+#define OV7725_IMAGEH  240  //è¡Œ HEIGHT å¾…é‡‡é›†æ‘„åƒå¤´å›¾åƒé«˜åº¦è¡Œæ•°
+#define OV7725_IMAGEW  320  //åˆ— WIDTH  å¾…é‡‡é›†æ‘„åƒå¤´å›¾åƒå®½åº¦åˆ—æ•° 
  
-#define SCCB_SCL_PIN  PTE1       //Ä£ÄâIICµÄSCLÐÅºÅ  1.ÐÞ¸ÄÒý½Å¼´¿ÉÐÞ¸ÄSCCB½Ó¿Ú
-#define SCCB_SDA_PIN  PTE0       //Ä£ÄâIICµÄSDAÐÅºÅ
+#define SCCB_SCL_PIN  PTE1       //æ¨¡æ‹ŸIICçš„SCLä¿¡å·  1.ä¿®æ”¹å¼•è„šå³å¯ä¿®æ”¹SCCBæŽ¥å£
+#define SCCB_SDA_PIN  PTE0       //æ¨¡æ‹ŸIICçš„SDAä¿¡å·
 
-#define SCL_Out     GPIO_PinSetDir(SCCB_SCL_PIN, 1);	//Êä³ö      //ÅäÖÃÊä³ö×÷ÎªSCL_Out
-#define SDA_Out     GPIO_PinSetDir(SCCB_SDA_PIN, 1);	//Êä³ö      //ÅäÖÃ×÷ÎªÊä³ö×÷ÎªSDA_Out
-#define SDA_In      GPIO_PinSetDir(SCCB_SDA_PIN, 0);    //ÊäÈë      //ÅäÖÃ×÷ÎªÊäÈë×÷ÎªSDA_In
+#define SCL_Out     GPIO_PinSetDir(SCCB_SCL_PIN, 1);	//è¾“å‡º      //é…ç½®è¾“å‡ºä½œä¸ºSCL_Out
+#define SDA_Out     GPIO_PinSetDir(SCCB_SDA_PIN, 1);	//è¾“å‡º      //é…ç½®ä½œä¸ºè¾“å‡ºä½œä¸ºSDA_Out
+#define SDA_In      GPIO_PinSetDir(SCCB_SDA_PIN, 0);    //è¾“å…¥      //é…ç½®ä½œä¸ºè¾“å…¥ä½œä¸ºSDA_In
 
-#define SCL_High    PTE1_OUT=1   //ÅäÖÃÊä³ö¸ßµçÆ½    2.ÐÞ¸ÄÒý½Å¼´¿ÉÐÞ¸ÄSCCB½Ó¿Ú
-#define SCL_Low     PTE1_OUT=0   //ÅäÖÃÊä³öµÍµçÆ½
-#define SDA_High    PTE0_OUT=1   //ÅäÖÃÊä³ö¸ßµçÆ½
-#define SDA_Low     PTE0_OUT=0   //ÅäÖÃÊä³öµÍµçÆ½
-#define SDA_Data    PTE0_IN      //¶ÁÈ¡Òý½ÅÉÏµÄÒý½Å×´Ì¬
+#define SCL_High    PTE1_OUT=1   //é…ç½®è¾“å‡ºé«˜ç”µå¹³    2.ä¿®æ”¹å¼•è„šå³å¯ä¿®æ”¹SCCBæŽ¥å£
+#define SCL_Low     PTE1_OUT=0   //é…ç½®è¾“å‡ºä½Žç”µå¹³
+#define SDA_High    PTE0_OUT=1   //é…ç½®è¾“å‡ºé«˜ç”µå¹³
+#define SDA_Low     PTE0_OUT=0   //é…ç½®è¾“å‡ºä½Žç”µå¹³
+#define SDA_Data    PTE0_IN      //è¯»å–å¼•è„šä¸Šçš„å¼•è„šçŠ¶æ€
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿OV7725_Init
-¡¾¹¦    ÄÜ¡¿ÉãÏñÍ·³õÊ¼»¯
-¡¾²Î    Êý¡¿fps  Ö¡ÂÊ
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿
-¡¾×¢ÒâÊÂÏî¡¿
+ã€å‡½    æ•°ã€‘OV7725_Init
+ã€åŠŸ    èƒ½ã€‘æ‘„åƒå¤´åˆå§‹åŒ–
+ã€å‚    æ•°ã€‘fps  å¸§çŽ‡
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘
+ã€æ³¨æ„äº‹é¡¹ã€‘
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_Init(uint8_t fps);
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿OV7725_Init_Regs
-¡¾¹¦    ÄÜ¡¿×Ô¶¯ÆØ¹â VGA
-¡¾²Î    Êý¡¿ÎÞ
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿
-¡¾×¢ÒâÊÂÏî¡¿
+ã€å‡½    æ•°ã€‘OV7725_Init_Regs
+ã€åŠŸ    èƒ½ã€‘è‡ªåŠ¨æ›å…‰ VGA
+ã€å‚    æ•°ã€‘æ— 
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘
+ã€æ³¨æ„äº‹é¡¹ã€‘
 --------------------------------------------------------------------------------------------------------*/
 uint8_t OV7725_Init_Regs(void);
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿OV7725_SoftwareReset
-¡¾¹¦    ÄÜ¡¿¸´Î»ÉãÏñÍ· »Ö¸´Ä¬ÈÏÅäÖÃ
-¡¾²Î    Êý¡¿ÎÞ
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿
-¡¾×¢ÒâÊÂÏî¡¿
+ã€å‡½    æ•°ã€‘OV7725_SoftwareReset
+ã€åŠŸ    èƒ½ã€‘å¤ä½æ‘„åƒå¤´ æ¢å¤é»˜è®¤é…ç½®
+ã€å‚    æ•°ã€‘æ— 
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘
+ã€æ³¨æ„äº‹é¡¹ã€‘
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_SoftwareReset(void);
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿OV7725_SpecialEffectConfigs
-¡¾¹¦    ÄÜ¡¿ÌØÐ§ÅäÖÃ
-¡¾²Î    Êý¡¿0:ÆÕÍ¨Ä£Ê½ 1.ºÚ°× 2.¸´¹Å  3,Æ«À¶4,Æ«ºì5,Æ«ÂÌ 6,¸ºÆ¬
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿
-¡¾×¢ÒâÊÂÏî¡¿
+ã€å‡½    æ•°ã€‘OV7725_SpecialEffectConfigs
+ã€åŠŸ    èƒ½ã€‘ç‰¹æ•ˆé…ç½®
+ã€å‚    æ•°ã€‘0:æ™®é€šæ¨¡å¼ 1.é»‘ç™½ 2.å¤å¤  3,åè“4,åçº¢5,åç»¿ 6,è´Ÿç‰‡
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘
+ã€æ³¨æ„äº‹é¡¹ã€‘
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_SpecialEffectConfigs(uint8_t mode);
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿OV7725_LightModeConfigs
-¡¾¹¦    ÄÜ¡¿µÆ¹âÅäÖÃ
-¡¾²Î    Êý¡¿0:×Ô¶¯Ä£Ê½1:ÇçÌì2,¶àÔÆ3,°ì¹«ÊÒ4,¼ÒÀï5,Ò¹Íí
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿
-¡¾×¢ÒâÊÂÏî¡¿
+ã€å‡½    æ•°ã€‘OV7725_LightModeConfigs
+ã€åŠŸ    èƒ½ã€‘ç¯å…‰é…ç½®
+ã€å‚    æ•°ã€‘0:è‡ªåŠ¨æ¨¡å¼1:æ™´å¤©2,å¤šäº‘3,åŠžå…¬å®¤4,å®¶é‡Œ5,å¤œæ™š
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘
+ã€æ³¨æ„äº‹é¡¹ã€‘
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_LightModeConfigs(uint8_t mode);
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿OV7725_SetFPS
-¡¾¹¦    ÄÜ¡¿ÉèÖÃFPS 
-¡¾²Î    Êý¡¿fps
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿
-¡¾×¢ÒâÊÂÏî¡¿ÅäÖÃµÄÊÇÉãÏñÍ·µÄÖ¡ÂÊÊä³ö£¬Ö¡ÂÊÔ½¸ß£¬µ¥Æ¬»úµÄÐÂÄÜÒªÇóÔ½¸ß
+ã€å‡½    æ•°ã€‘OV7725_SetFPS
+ã€åŠŸ    èƒ½ã€‘è®¾ç½®FPS 
+ã€å‚    æ•°ã€‘fps
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘
+ã€æ³¨æ„äº‹é¡¹ã€‘é…ç½®çš„æ˜¯æ‘„åƒå¤´çš„å¸§çŽ‡è¾“å‡ºï¼Œå¸§çŽ‡è¶Šé«˜ï¼Œå•ç‰‡æœºçš„æ–°èƒ½è¦æ±‚è¶Šé«˜
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_SetFPS(uint8_t fps);
 /*********************************************************************
- *ÉãÏñÍ·SCCBµ×²ãÇý¶¯
- *ÄÚ²¿µ÷ÓÃ
+ *æ‘„åƒå¤´SCCBåº•å±‚é©±åŠ¨
+ *å†…éƒ¨è°ƒç”¨
  ***********************************************************************/
 void SCCB_Init(void);
 void SCCB_Wait(void);

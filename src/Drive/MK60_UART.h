@@ -18,8 +18,8 @@
 #define UART0_RX    PTA15       //PTA1、PTA15、PTB16、PTD6         PTA1不要用（与J-LINK冲突）
 #define UART0_TX    PTA14        //PTA2、PTA14、PTB17、PTD7        PTA2不要用（与J-LINK冲突）
 
-#define UART1_RX    PTC3        //PTC3、PTE1
-#define UART1_TX    PTC4        //PTC4、PTE0
+#define UART1_RX    PTE1        //PTC3、PTE1
+#define UART1_TX    PTE0        //PTC4、PTE0
 
 #define UART2_RX    PTD2        //PTD2
 #define UART2_TX    PTD3        //PTD3

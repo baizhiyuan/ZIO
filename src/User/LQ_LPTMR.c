@@ -1,14 +1,14 @@
 /*-----------------------------------------------------------------------------------------------------
-¡¾Æ½    Ì¨¡¿ÁúÇñK60ºËÐÄ°å-ÖÇÄÜ³µ°å
-¡¾±à    Ð´¡¿LQ-005
-¡¾E-mail  ¡¿chiusir@163.com
-¡¾Èí¼þ°æ±¾¡¿V1.0£¬ÁúÇñ¿ªÔ´´úÂë£¬½ö¹©²Î¿¼£¬ºó¹û×Ô¸º
-¡¾×îºó¸üÐÂ¡¿2019Äê04ÔÂ02ÈÕ
-¡¾Íø    Õ¾¡¿http://www.lqist.cn
-¡¾ÌÔ±¦µêÆÌ¡¿http://shop36265907.taobao.com
-¡¾±àÒëÆ½Ì¨¡¿IAR 8.2
-¡¾¹¦    ÄÜ¡¿LPTMRÀý×Ó
-¡¾×¢ÒâÊÂÏî¡¿
+ã€å¹³    å°ã€‘é¾™é‚±K60æ ¸å¿ƒæ¿-æ™ºèƒ½è½¦æ¿
+ã€ç¼–    å†™ã€‘LQ-005
+ã€E-mail  ã€‘chiusir@163.com
+ã€è½¯ä»¶ç‰ˆæœ¬ã€‘V1.0ï¼Œé¾™é‚±å¼€æºä»£ç ï¼Œä»…ä¾›å‚è€ƒï¼ŒåŽæžœè‡ªè´Ÿ
+ã€æœ€åŽæ›´æ–°ã€‘2019å¹´04æœˆ02æ—¥
+ã€ç½‘    ç«™ã€‘http://www.lqist.cn
+ã€æ·˜å®åº—é“ºã€‘http://shop36265907.taobao.com
+ã€ç¼–è¯‘å¹³å°ã€‘IAR 8.2
+ã€åŠŸ    èƒ½ã€‘LPTMRä¾‹å­
+ã€æ³¨æ„äº‹é¡¹ã€‘
 -------------------------------------------------------------------------------------------------------*/
 #include "include.h"
 #include "LQ_LPTMR.h"
@@ -16,12 +16,12 @@
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿Test_LptmrTimer
-¡¾¹¦    ÄÜ¡¿²âÊÔLPTMR
-¡¾²Î    Êý¡¿ÎÞ
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿Test_LptmrTimer(); //²âÊÔLptmr¶¨Ê±Æ÷
-¡¾×¢ÒâÊÂÏî¡¿Í¬Ò»Ê±¼äÖ»ÄÜÊ¹ÓÃLPTMRµÄÒ»ÖÖ¹¦ÄÜ  delaymsÒ»°ãÊÇÓÃµÄLPTMR 
+ã€å‡½    æ•°ã€‘Test_LptmrTimer
+ã€åŠŸ    èƒ½ã€‘æµ‹è¯•LPTMR
+ã€å‚    æ•°ã€‘æ— 
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘Test_LptmrTimer(); //æµ‹è¯•Lptmrå®šæ—¶å™¨
+ã€æ³¨æ„äº‹é¡¹ã€‘åŒä¸€æ—¶é—´åªèƒ½ä½¿ç”¨LPTMRçš„ä¸€ç§åŠŸèƒ½  delaymsä¸€èˆ¬æ˜¯ç”¨çš„LPTMR 
 --------------------------------------------------------------------------------------------------------*/
 void Test_LptmrTimer(void)
 {
@@ -29,15 +29,15 @@ void Test_LptmrTimer(void)
     
     UART_Init(UART4, 115200);
     
-    printf("LPTMR³ÌÐò¼ÆÊ±Æ÷²âÊÔÀý³Ì  \n ");
-    printf("Í¬Ò»Ê±¼äÖ»ÄÜÊ¹ÓÃLPTMRµÄÒ»ÖÖ¹¦ÄÜ  \n ");
+    printf("LPTMRç¨‹åºè®¡æ—¶å™¨æµ‹è¯•ä¾‹ç¨‹  \n ");
+    printf("åŒä¸€æ—¶é—´åªèƒ½ä½¿ç”¨LPTMRçš„ä¸€ç§åŠŸèƒ½  \n ");
     
     LPTMR_TimeStartus();
     while(1)
     {
         if(LPTMR_TimeGetus() >= 5000)
         {
-            LED_Reverse(0);              //ÓÃÊ¾²¨Æ÷²âA17ÆµÂÊ 100Hz ÓÃÓÚ²âÊÔLPTMR¼ÆÊ±Æ÷ÊÇ·ñ×¼È·
+            LED_Reverse(0);              //ç”¨ç¤ºæ³¢å™¨æµ‹A17é¢‘çŽ‡ 100Hz ç”¨äºŽæµ‹è¯•LPTMRè®¡æ—¶å™¨æ˜¯å¦å‡†ç¡®
             LPTMR_TimeStartus();
         }   
     }
@@ -46,14 +46,14 @@ void Test_LptmrTimer(void)
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿Test_LptmrPulse
-¡¾¹¦    ÄÜ¡¿²âÊÔLPTMRÂö³å¼ÆÊý
-¡¾²Î    Êý¡¿ÎÞ
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿Test_LptmrPulse(); //²âÊÔLptmrÂö³å¼ÆÊý
-¡¾×¢ÒâÊÂÏî¡¿Í¬Ò»Ê±¼äÖ»ÄÜÊ¹ÓÃLPTMRµÄÒ»ÖÖ¹¦ÄÜ  delaymsÒ»°ãÊÇÓÃµÄLPTMR 
-¡¾×¢ÒâÊÂÏî¡¿¿ÉÒÔÊ¹ÓÃÒ»¸öÆÕÍ¨Òý½ÅºÍ´ø·½Ïò±àÂëÆ÷µÄ·½ÏòÏàÁ¬£¬PTC5ºÍ±àÂëÆ÷µÄÂö³åÏàÁ¬ 
-¡¾×¢ÒâÊÂÏî¡¿ÊµÏÖ´ø·½ÏòÂö³å²âËÙ
+ã€å‡½    æ•°ã€‘Test_LptmrPulse
+ã€åŠŸ    èƒ½ã€‘æµ‹è¯•LPTMRè„‰å†²è®¡æ•°
+ã€å‚    æ•°ã€‘æ— 
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘Test_LptmrPulse(); //æµ‹è¯•Lptmrè„‰å†²è®¡æ•°
+ã€æ³¨æ„äº‹é¡¹ã€‘åŒä¸€æ—¶é—´åªèƒ½ä½¿ç”¨LPTMRçš„ä¸€ç§åŠŸèƒ½  delaymsä¸€èˆ¬æ˜¯ç”¨çš„LPTMR 
+ã€æ³¨æ„äº‹é¡¹ã€‘å¯ä»¥ä½¿ç”¨ä¸€ä¸ªæ™®é€šå¼•è„šå’Œå¸¦æ–¹å‘ç¼–ç å™¨çš„æ–¹å‘ç›¸è¿žï¼ŒPTC5å’Œç¼–ç å™¨çš„è„‰å†²ç›¸è¿ž 
+ã€æ³¨æ„äº‹é¡¹ã€‘å®žçŽ°å¸¦æ–¹å‘è„‰å†²æµ‹é€Ÿ
 --------------------------------------------------------------------------------------------------------*/
 void Test_LptmrPulse(void)
 {
@@ -61,17 +61,17 @@ void Test_LptmrPulse(void)
     
     UART_Init(UART4, 115200);
     
-    printf("LPTMRÂö³å¼ÆÊý²âÊÔÀý³Ì  \n ");
-    printf("Í¬Ò»Ê±¼äÖ»ÄÜÊ¹ÓÃLPTMRµÄÒ»ÖÖ¹¦ÄÜ  \n ");
+    printf("LPTMRè„‰å†²è®¡æ•°æµ‹è¯•ä¾‹ç¨‹  \n ");
+    printf("åŒä¸€æ—¶é—´åªèƒ½ä½¿ç”¨LPTMRçš„ä¸€ç§åŠŸèƒ½  \n ");
 
-    /* Ê¹ÓÃPTC5 ²¶»ñÉÏÉýÑØÂö³å */
+    /* ä½¿ç”¨PTC5 æ•èŽ·ä¸Šå‡æ²¿è„‰å†² */
     LPTMR_PulseInit(LPT0_ALT2, 0xFFFF, LPT_Rising);
     
     while(1)
     {
         PIT_Delayms(PIT0, 10);
         
-        printf("²¶»ñµ½Âö³å %d \n ",LPTMR_PulseGet());
+        printf("æ•èŽ·åˆ°è„‰å†² %d \n ",LPTMR_PulseGet());
         
         LPTMR_PulseClean();
     }

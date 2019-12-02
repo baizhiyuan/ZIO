@@ -1,64 +1,64 @@
 /*******************************************************************************
-��ƽ    ̨������K66FX���ܳ�VDĸ��
-����    д��CHIUSIR
-��E-mail  ��chiusir@163.com
-�������汾��V1.0
-�������¡�2018��4��28��
-�������Ϣ�ο����е�ַ��
-����    վ��http://www.lqist.cn
-���Ա����̡�http://shop36265907.taobao.com
+【平    台】龙邱K66FX智能车VD母板
+【编    写】CHIUSIR
+【E-mail  】chiusir@163.com
+【软件版本】V1.0
+【最后更新】2018年4月28日
+【相关信息参考下列地址】
+【网    站】http://www.lqist.cn
+【淘宝店铺】http://shop36265907.taobao.com
 ------------------------------------------------
-��dev.env.��IAR7.80.4������
-��Target  ��K66FX1M0VLQ18
-��Crystal �� 50.000Mhz
-��busclock��100.000MHz
-��pllclock��200.000MHz
+【dev.env.】IAR7.80.4及以上
+【Target  】K66FX1M0VLQ18
+【Crystal 】 50.000Mhz
+【busclock】100.000MHz
+【pllclock】200.000MHz
 
 ******************************************************************************/
 #include "include.h"
 
 
 /*------------------------------------------------------------------------------------------------------
-����    ����OV7725_Init
-����    �ܡ�����ͷ��ʼ��
-����    ����fps  ֡��
-���� �� ֵ����
-��ʵ    �����Ƽ�ʹ��50֡��
-��ע�����ע��K60�������ޣ�̫��֡�ʻ������
+【函    数】OV7725_Init
+【功    能】摄像头初始化
+【参    数】fps  帧率
+【返 回 值】无
+【实    例】推荐使用50帧的
+【注意事项】注意K60性能有限，太高帧率会出问题
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_Init(uint8_t fps)
 {     
-    uint8_t id[2];    //�������ͷid
-    uint8_t ack = 0;  //�������мĴ��������Ƿ����   
+    uint8_t id[2];    //存放摄像头id
+    uint8_t ack = 0;  //检验所有寄存器操作是否出错   
     uint16_t width = OV7725_IMAGEW, height = OV7725_IMAGEH;
     uint16_t hstart, vstart, hsize;  
-    //����ͷ�Ĵ�������
-    SCCB_Init();                     //��ʼ��SCCB�ӿڣ�Ϊ���üĴ�����׼��
-    OV7725_SoftwareReset();          //�Ĵ����ָ���ʼֵ
+    //摄像头寄存器设置
+    SCCB_Init();                     //初始化SCCB接口，为配置寄存器做准备
+    OV7725_SoftwareReset();          //寄存器恢复初始值
     delayms(50);  
-    /*7725���ֱ��� 640 * 480*/
+    /*7725最大分辨率 640 * 480*/
     if ((OV7725_IMAGEW > 640) || (OV7725_IMAGEH > 480))
     {
 #ifdef LQ_TFT1_8
         TFTSPI_P8X8Str(0,0,"7725 dpi!!",u16RED,u16BLUE);
 #else
-        OLED_P6x8Str(2,1,(u8*)"7725 dpi!!");                      //����ͷʶ�ֱ������ù���ֹͣ����
+        OLED_P6x8Str(2,1,(u8*)"7725 dpi!!");                      //摄像头识分辨率设置过大，停止运行
 #endif
         while(1);
     }
-    ack += SCCB_RegRead(OV7725_SCCB_ADDR,OV7725_PID_REG,&id[0]);  //��ȡ����ͷid�߰�λ
-    ack += SCCB_RegRead(OV7725_SCCB_ADDR,OV7725_VER_REG,&id[1]);  //��ȡ����ͷid�Ͱ�λ
-    if(OV7725_REVISION != (((uint32_t)id[0] << 8U) | (uint32_t)id[1]))//����ͷ�汾�Ĵ��� 
+    ack += SCCB_RegRead(OV7725_SCCB_ADDR,OV7725_PID_REG,&id[0]);  //读取摄像头id高八位
+    ack += SCCB_RegRead(OV7725_SCCB_ADDR,OV7725_VER_REG,&id[1]);  //读取摄像头id低八位
+    if(OV7725_REVISION != (((uint32_t)id[0] << 8U) | (uint32_t)id[1]))//摄像头版本寄存器 
     {     
 #ifdef LQ_TFT1_8
         TFTSPI_P8X8Str(0,0,"7725 NG",u16RED,u16BLUE);
 #else
-        OLED_P6x8Str(2,1,(u8*)"7725 NG");                      //����ͷʶ��ʧ�ܣ�ֹͣ����
+        OLED_P6x8Str(2,1,(u8*)"7725 NG");                      //摄像头识别失败，停止运行
 #endif
         
         while(1); 
     } 
-    else                                                      //оƬID��ȷ
+    else                                                      //芯片ID正确
     {
 #ifdef LQ_TFT1_8
         TFTSPI_P8X8Str(0,0,"7725 OK",u16RED,u16BLUE);
@@ -67,55 +67,55 @@ void OV7725_Init(uint8_t fps)
 #endif
         
     }
-    ack += OV7725_Init_Regs();     //�Ȱ��ٷ���Ĭ�ϳ�ʼ�� VGA ������Ҫ�ٸ�
+    ack += OV7725_Init_Regs();     //先按官方的默认初始化 VGA 后面需要再改
     
-    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM2_REG, 0x03);  //����������� Bit[4]: ˯��ģʽ Bit[1:0]: ��������00: 1x 01: 2x 10: 3x 11: 4x
-//    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM7_REG, 0x46);  //  ʹ��QVGA �� RGB565 ��ʽ
+    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM2_REG, 0x03);  //输出驱动能力 Bit[4]: 睡眠模式 Bit[1:0]: 驱动能力00: 1x 01: 2x 10: 3x 11: 4x
+//    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM7_REG, 0x46);  //  使用QVGA 和 RGB565 格式
 //                                                                  /*OV7725_COM7_REG
-//                                                                    Bit[7]: ���üĴ���
-//                                                                    0: ������
-//                                                                    1: �����мĴ�������ΪĬ��ֵ
-//                                                                    Bit[6]: �ֱ������ã�7725���֧�����ֱַ��ʣ������������Զ���ֱ����൱�ڽ�ȡ�����ֱַ������е�һ���֣��ᶪʧ��Ұ��
+//                                                                    Bit[7]: 重置寄存器
+//                                                                    0: 不重置
+//                                                                    1: 将所有寄存器重置为默认值
+//                                                                    Bit[6]: 分辨率设置（7725输出支持两种分辨率，其他的任意自定义分辨率相当于截取这两种分辨率其中的一部分，会丢失视野）
 //                                                                    0: VGA
 //                                                                    1: QVGA
-//                                                                    Bit[5]: BT.656Э�鿪/��ѡ��
-//                                                                    Bit[4]: ��������ԭʼֵ
-//                                                                    Bit[3:2]: RGB�����ʽ�ؼ�
+//                                                                    Bit[5]: BT.656协议开/关选择
+//                                                                    Bit[4]: 传感器的原始值
+//                                                                    Bit[3:2]: RGB输出格式控件
 //                                                                    00: GBR4:2:2
 //                                                                    01: RGB565
 //                                                                    10: RGB555
 //                                                                    11: RGB444
-//                                                                    Bit[1:0]: �����ʽ����
+//                                                                    Bit[1:0]: 输出格式控制
 //                                                                    00: YUV
 //                                                                    01: Processed Bayer RAW
 //                                                                    10: RGB
 //                                                                    11: Bayer RAW */
-//    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM3_REG, 0x00);//Bit[6]: 0ˮƽ����� 1ˮƽ����  ע�⿪��ˮƽ����ʱ��ÿ���0x32�Ĵ�����Bit[7]:����ͼ���Ե����-�ھ���ģʽ��Ӧ������Ϊ1
-//                                                                 //Bit[4]: 0 UYVYģʽ  1 YUYVģʽ  
-//                                                                 //Bit[3]: 0 С��      1 ��� 
-//    hstart = (0x3fU << 2U);   //ͼ��ˮƽ��ʼλ�� ʹ��VGAʱ Ϊ0x23
-//    vstart = (0x03U  << 1U) ;   //ͼ��ֱ��ʼλ�� ʹ��VGAʱ Ϊ0x07   
+//    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM3_REG, 0x00);//Bit[6]: 0水平镜像关 1水平镜像开  注意开启水平镜像时最好开启0x32寄存器的Bit[7]:镜像图像边缘对齐-在镜像模式下应该设置为1
+//                                                                 //Bit[4]: 0 UYVY模式  1 YUYV模式  
+//                                                                 //Bit[3]: 0 小端      1 大端 
+//    hstart = (0x3fU << 2U);   //图像水平开始位置 使用VGA时 为0x23
+//    vstart = (0x03U  << 1U) ;   //图像垂直开始位置 使用VGA时 为0x07   
     
     /*OV7725_COM7_REG
-    Bit[7]: ���üĴ���
-    0: ������
-    1: �����мĴ�������ΪĬ��ֵ
-    Bit[6]: �ֱ������ã�7725���֧�����ֱַ��ʣ������������Զ���ֱ����൱�ڽ�ȡ�����ֱַ������е�һ���֣��ᶪʧ��Ұ��
+    Bit[7]: 重置寄存器
+    0: 不重置
+    1: 将所有寄存器重置为默认值
+    Bit[6]: 分辨率设置（7725输出支持两种分辨率，其他的任意自定义分辨率相当于截取这两种分辨率其中的一部分，会丢失视野）
     0: VGA
     1: QVGA
-    Bit[5]: BT.656Э�鿪/��ѡ��
-    Bit[4]: ��������ԭʼֵ
-    Bit[3:2]: RGB�����ʽ�ؼ�
+    Bit[5]: BT.656协议开/关选择
+    Bit[4]: 传感器的原始值
+    Bit[3:2]: RGB输出格式控件
     00: GBR4:2:2
     01: RGB565
     10: RGB555
     11: RGB444
-    Bit[1:0]: �����ʽ����
+    Bit[1:0]: 输出格式控制
     00: YUV
     01: Processed Bayer RAW
     10: RGB
     11: Bayer RAW */
-    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM7_REG, 0x43);  //  ʹ��QVGA �� Bayer RAW ��ʽ
+    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM7_REG, 0x43);  //  使用QVGA 和 Bayer RAW 格式
                                                                   
     
     /*Bit[1:0]: Output selection
@@ -125,100 +125,100 @@ void OV7725_Init(uint8_t fps)
       11: RAW10*/
     ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_DSP_CTRL4_REG, 0x4a);  
     
-    //Bit[6]: 0ˮƽ����� 1ˮƽ����  ע�⿪��ˮƽ����ʱ��ÿ���0x32�Ĵ�����Bit[7]:����ͼ���Ե����-�ھ���ģʽ��Ӧ������Ϊ1
-    //Bit[4]: 0 UYVYģʽ  1 YUYVģʽ  
-    //Bit[3]: ��С��
+    //Bit[6]: 0水平镜像关 1水平镜像开  注意开启水平镜像时最好开启0x32寄存器的Bit[7]:镜像图像边缘对齐-在镜像模式下应该设置为1
+    //Bit[4]: 0 UYVY模式  1 YUYV模式  
+    //Bit[3]: 大小端
     ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM3_REG, 0x00);
     
-    /*Bit[7]: ���ÿ���AGC/AEC�㷨
-    Bit[6]: AEC -��������
-    0: �������ڴ�ֱ�հ�
-    1: ���޵Ĳ���
-    Bit[5]: �����˿�/��
-    Bit[4]: ���õ�������ֵ��AEC
-    0: ���ع�ʱ��������1/100��1/120
-    ������κι��������µ����ô�ͨ�˲���
-    1: �����ع�ʱ��С��1/100��1/120
-    �����ǿ�������µ����ô�ͨ�˲���
-    Bit[3]: ���õ�AEC��/�ؿ���
-    0: ������С�ع�ʱ��Ϊһ��
-    1: �����ع�ʱ��С��һ��
-    Bit[2]: �Զ��������ʹ
-    0: �ֶ�ģʽ
-    1: �Զ�ģʽ
+    /*Bit[7]: 启用快速AGC/AEC算法
+    Bit[6]: AEC -步长限制
+    0: 步长限于垂直空白
+    1: 无限的步长
+    Bit[5]: 带过滤开/关
+    Bit[4]: 启用低于条带值的AEC
+    0: 将曝光时间限制在1/100或1/120
+    其次在任何光照条件下当启用带通滤波器
+    1: 允许曝光时间小于1/100或1/120
+    其次在强光条件下当启用带通滤波器
+    Bit[3]: 良好的AEC开/关控制
+    0: 限制最小曝光时间为一行
+    1: 允许曝光时间小于一行
+    Bit[2]: 自动增益控制使
+    0: 手动模式
+    1: 自动模式
     Bit[1]: AWB Enable
-    0: �ֶ�ģʽ
-    1: �Զ�ģʽ
+    0: 手动模式
+    1: 自动模式
     Bit[0]: AEC Enable
-    0: �ֶ�ģʽ
-    1: �Զ�ģʽ*/
+    0: 手动模式
+    1: 自动模式*/
     ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM8_REG, 0xff);
     
-    /*�Աȶ����� ��һ��ֵΪ0x20  ԽС�Աȶ�Խ��*/
+    /*对比度设置 归一化值为0x20  越小对比度越大*/
     ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_CNST_REG, 0x20);
-//    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_BRIGHT_REG, 0x20);/*��������*/
-//    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SIGN_REG, 0x20);/*��������*/
-    hstart = 0x3fU << 2U;   //ͼ��ˮƽ��ʼλ��
-    vstart = 0x03U << 1U;   //ͼ��ֱ��ʼλ��
+//    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_BRIGHT_REG, 0x20);/*亮度设置*/
+//    ack += SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SIGN_REG, 0x20);/*亮度设置*/
+    hstart = 0x3fU << 2U;   //图像水平开始位置
+    vstart = 0x03U << 1U;   //图像垂直开始位置
 
     
     OV7725_SetFPS(fps);
     
     
-    ack += SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_EXHCL_REG, 0x00); //�������ز���LSB������ˮƽ��������������ص�LSB
-    ack += SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_ADVFL_REG, 0x00); //��ֱͬ������������(1λ����1��)��LSB
-    ack += SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_ADVFH_REG, 0x00); //��ֱͬ�����������е�MSB 
+    ack += SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_EXHCL_REG, 0x00); //虚拟像素插入LSB用于在水平方向插入虚拟像素的LSB
+    ack += SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_ADVFL_REG, 0x00); //垂直同步插入虚拟行(1位等于1行)的LSB
+    ack += SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_ADVFH_REG, 0x00); //垂直同步插入虚拟行的MSB 
     /* Resolution and timing. */
     hsize = width + 16;
 
-    /* �������ͼƬ��С. */
+    /* 设置输出图片大小. */
     
-    //ˮƽ��ʼλ�ø�λ  ��Ϊ�Ĵ�����8λ�� ���255���������640 * 480 �Ų��£�����10λ���ݣ������Ǹ�8λ��ʣ�µ���λ����OV7725_HREF_REG��
+    //水平起始位置高位  因为寄存器是8位的 最大255，像素最大640 * 480 放不下，用了10位数据，这里是高8位，剩下的两位放在OV7725_HREF_REG中
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_HSTART_REG, hstart >> 2U); 
     
-    //ˮƽ���ȸ�λ      ��Ϊ�Ĵ�����8λ�� ���255���������640 * 480 �Ų��£�����10λ���ݣ������Ǹ�8λ��ʣ�µ���λ����OV7725_HREF_REG��
+    //水平宽度高位      因为寄存器是8位的 最大255，像素最大640 * 480 放不下，用了10位数据，这里是高8位，剩下的两位放在OV7725_HREF_REG中
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_HSIZE_REG, hsize >> 2U);  
     
-    //��ֱ��ʼλ�ø�λ  ��Ϊ�Ĵ�����8λ�� ���255���������640 * 480 �Ų��£�����9λ���ݣ������Ǹ�8λ��ʣ�µ���λ����OV7725_HREF_REG��
+    //垂直起始位置高位  因为寄存器是8位的 最大255，像素最大640 * 480 放不下，用了9位数据，这里是高8位，剩下的两位放在OV7725_HREF_REG中
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VSTART_REG, vstart >> 1U); 
     
-    //��ֱ�߶ȸ�λ      ��Ϊ�Ĵ�����8λ�� ���255���������640 * 480 �Ų��£�����9λ���ݣ������Ǹ�8λ��ʣ�µ���λ����OV7725_HREF_REG��
+    //垂直高度高位      因为寄存器是8位的 最大255，像素最大640 * 480 放不下，用了9位数据，这里是高8位，剩下的两位放在OV7725_HREF_REG中
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VSIZE_REG, height >> 1U);   
     
-    //ˮƽ������ȸ�λ  ��Ϊ�Ĵ�����8λ�� ���255���������640 * 480 �Ų��£�����10λ���ݣ������Ǹ�8λ��ʣ�µ���λ����OV7725_EXHCH_REG��
+    //水平输出宽度高位  因为寄存器是8位的 最大255，像素最大640 * 480 放不下，用了10位数据，这里是高8位，剩下的两位放在OV7725_EXHCH_REG中
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_HOUTSIZE_REG, width >> 2U); 
     
-    //��ֱ����߶ȸ�λ  ��Ϊ�Ĵ�����8λ�� ���255���������640 * 480 �Ų��£�����9λ���ݣ������Ǹ�8λ��ʣ�µ���λ����OV7725_EXHCH_REG��
+    //垂直输出高度高位  因为寄存器是8位的 最大255，像素最大640 * 480 放不下，用了9位数据，这里是高8位，剩下的两位放在OV7725_EXHCH_REG中
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VOUTSIZE_REG, height >> 1U);
     
-    //ˮƽ���Ⱥʹ�ֱ�߶ȵĵ�λ
+    //水平宽度和垂直高度的低位
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_HREF_REG,
                     ((vstart & 1U) << 6U) | ((hstart & 3U) << 4U) | ((height & 1U) << 2U) | ((hsize & 3U) << 0U)); 
     
-    //ˮƽ����ʹ�ֱ����ĵ�2λ�͵�1λ
+    //水平输出和垂直输出的低2位和低1位
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_EXHCH_REG, ((height & 1U) << 2U) | ((width & 3U) << 0U));  
       
 }
 
 /*------------------------------------------------------------------------------------------------------
-����    ����OV7725_SetFPS
-����    �ܡ�����FPS 
-����    ����fps
-���� �� ֵ����
-��ʵ    ����
-��ע��������õ�������ͷ��֡�������֡��Խ�ߣ���Ƭ��������Ҫ��Խ��
+【函    数】OV7725_SetFPS
+【功    能】设置FPS 
+【参    数】fps
+【返 回 值】无
+【实    例】
+【注意事项】配置的是摄像头的帧率输出，帧率越高，单片机的新能要求越高
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_SetFPS(uint8_t fps)
 {
     if(fps > 75)
     {
-        /* ���໷8��Ƶ ������
-        Bit[7:6]: ���໷��Ƶ������
-        00: ���ñ�Ƶ
-        01: 4��Ƶ
-        10: 6��Ƶ
-        11: 8��Ƶ
-        Bit[5:4]: �Զ��عⴰ�ڴ�С
+        /* 锁相环8倍频 满窗口
+        Bit[7:6]: 锁相环倍频器控制
+        00: 不用倍频
+        01: 4倍频
+        10: 6倍频
+        11: 8倍频
+        Bit[5:4]: 自动曝光窗口大小
         00: Full window
         01: 1/2 window
         10: 1/4 window
@@ -229,8 +229,8 @@ void OV7725_SetFPS(uint8_t fps)
     {
         SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM4_REG, 0x41);  //PCLK 24M   
     }
-    uint16_t dm_lnl = 0;                                               //������
-    uint8_t  div    = 1;                                               //ʱ�ӷ�Ƶϵ��
+    uint16_t dm_lnl = 0;                                               //虚拟行
+    uint8_t  div    = 1;                                               //时钟分频系数
     if(fps > 150)
     {
         fps = 150;
@@ -262,25 +262,25 @@ void OV7725_SetFPS(uint8_t fps)
         div = 14;
         dm_lnl = 0;
     }
-    /*ʱ������ ʱ�� = PCLK * 4 / ����1+1��*4�� ʱ��Խ�ߣ�֡��Խ�� ����DMA���ܽ��ܲ��˻������ 
-    Bit[6]: ֱ��ʹ���ⲿʱ��(û��ʱ��Ԥ�̶ȿ���)
-    Bit[5:0]: ʱ�� = PCLK �� ���໷��Ƶ�� /[(CLKRC[5:0] + 1) �� 4]*/
+    /*时钟配置 时钟 = PCLK * 4 / （（1+1）*4） 时钟越高，帧率越快 不过DMA可能接受不了会有噪点 
+    Bit[6]: 直接使用外部时钟(没有时钟预刻度可用)
+    Bit[5:0]: 时钟 = PCLK × 锁相环倍频器 /[(CLKRC[5:0] + 1) × 4]*/
     SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_CLKRC_REG, div);
     
-    /*�����еͰ�λ�� ���������п��Խ���֡�ʣ��ʵ����Ӱ�֡�����õ��Լ���Ҫ��֡��*/
+    /*虚拟行低八位， 增加虚拟行可以降低帧率，适当添加把帧率配置到自己想要的帧率*/
     SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_DM_LNL_REG, (uint8_t)dm_lnl);  
     
-    /*�����и߰�λ*/
+    /*虚拟行高八位*/
     SCCB_RegWrite(OV7725_SCCB_ADDR, OV7725_DM_LNH_REG, (uint8_t)(dm_lnl>>8)); 
     
 }
 /*------------------------------------------------------------------------------------------------------
-����    ����OV7725_Init_Regs
-����    �ܡ��Զ��ع� VGA
-����    ������
-���� �� ֵ����
-��ʵ    ����
-��ע�����
+【函    数】OV7725_Init_Regs
+【功    能】自动曝光 VGA
+【参    数】无
+【返 回 值】无
+【实    例】
+【注意事项】
 --------------------------------------------------------------------------------------------------------*/
 uint8_t OV7725_Init_Regs(void)
 {
@@ -348,30 +348,30 @@ uint8_t OV7725_Init_Regs(void)
 }
 
 /*------------------------------------------------------------------------------------------------------
-����    ����OV7725_SoftwareReset
-����    �ܡ���λ����ͷ �ָ�Ĭ������
-����    ������
-���� �� ֵ����
-��ʵ    ����
-��ע�����
+【函    数】OV7725_SoftwareReset
+【功    能】复位摄像头 恢复默认配置
+【参    数】无
+【返 回 值】无
+【实    例】
+【注意事项】
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_SoftwareReset(void)
 {
     SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM7_REG, 0x80);
 }
 /*------------------------------------------------------------------------------------------------------
-����    ����OV7725_LightModeConfigs
-����    �ܡ��ƹ�����
-����    ����0:�Զ�ģʽ1:����2,����3,�칫��4,����5,ҹ��
-���� �� ֵ����
-��ʵ    ����
-��ע�����
+【函    数】OV7725_LightModeConfigs
+【功    能】灯光配置
+【参    数】0:自动模式1:晴天2,多云3,办公室4,家里5,夜晚
+【返 回 值】无
+【实    例】
+【注意事项】
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_LightModeConfigs(uint8_t mode)
 {
     switch(mode)
     {
-        case 1:  //����
+        case 1:  //晴天
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM8_REG, 0xfd);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_BLUE_REG, 0x5a);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_RED_REG, 0x5c);
@@ -379,7 +379,7 @@ void OV7725_LightModeConfigs(uint8_t mode)
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFL_REG, 0x00);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFH_REG, 0x00);
             break;
-        case 2:  //����
+        case 2:  //多云
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM8_REG, 0xfd);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_BLUE_REG, 0x58);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_RED_REG, 0x60);
@@ -388,7 +388,7 @@ void OV7725_LightModeConfigs(uint8_t mode)
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFH_REG, 0x00);
         
             break;
-        case 3:  //�칫��
+        case 3:  //办公室
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM8_REG, 0xfd);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_BLUE_REG, 0x84);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_RED_REG, 0x4c);
@@ -396,7 +396,7 @@ void OV7725_LightModeConfigs(uint8_t mode)
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFL_REG, 0x00);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFH_REG, 0x00);
             break;
-        case 4:   //����
+        case 4:   //家里
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM8_REG, 0xfd);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_BLUE_REG, 0x96);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_RED_REG, 0x40);
@@ -404,7 +404,7 @@ void OV7725_LightModeConfigs(uint8_t mode)
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFL_REG, 0x00);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFH_REG, 0x00);
             break;
-        case 5:   //����
+        case 5:   //晚上
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM8_REG, 0xff);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_BLUE_REG, 0x80);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_RED_REG, 0x80);
@@ -412,7 +412,7 @@ void OV7725_LightModeConfigs(uint8_t mode)
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFL_REG, 0x00);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_ADVFH_REG, 0x00);
             break;
-        default:   //�Զ�ģʽ
+        default:   //自动模式
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_COM8_REG, 0xff);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_BLUE_REG, 0x80);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_RED_REG, 0x80);
@@ -423,49 +423,49 @@ void OV7725_LightModeConfigs(uint8_t mode)
     }
 }
 /*------------------------------------------------------------------------------------------------------
-����    ����OV7725_SpecialEffectConfigs
-����    �ܡ���Ч����
-����    ����0:��ͨģʽ 1.�ڰ� 2.����  3,ƫ��4,ƫ��5,ƫ�� 6,��Ƭ
-���� �� ֵ����
-��ʵ    ����
-��ע�����
+【函    数】OV7725_SpecialEffectConfigs
+【功    能】特效配置
+【参    数】0:普通模式 1.黑白 2.复古  3,偏蓝4,偏红5,偏绿 6,负片
+【返 回 值】无
+【实    例】
+【注意事项】
 --------------------------------------------------------------------------------------------------------*/
 void OV7725_SpecialEffectConfigs(uint8_t mode)
 {
 
     switch(mode)
     {
-        case 1:  //�ڰ�
+        case 1:  //黑白
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SDE_REG, 0x26);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_UFIX_REG, 0x80);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VFIX_REG, 0x80);
             break;
-        case 2:  //����
+        case 2:  //复古
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SDE_REG, 0x1e);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_UFIX_REG, 0x40);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VFIX_REG, 0xa0);
             break;
-        case 3:  //ƫ��
+        case 3:  //偏蓝
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SDE_REG, 0x1e);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_UFIX_REG, 0xa0);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VFIX_REG, 0x40);
             break;
-        case 4:   //ƫ��
+        case 4:   //偏红
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SDE_REG, 0x1e);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_UFIX_REG, 0x80);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VFIX_REG, 0x40);
             break;
-        case 5:   //ƫ��
+        case 5:   //偏绿
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SDE_REG, 0x1e);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_UFIX_REG, 0x60);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VFIX_REG, 0x60);
             break;
-        case 6:   //��Ƭ
+        case 6:   //负片
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SDE_REG, 0x46);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_UFIX_REG, 0x00);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VFIX_REG, 0x00);
             break;
-        default:   //��ͨģʽ
+        default:   //普通模式
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_SDE_REG, 0x06);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_UFIX_REG, 0x80);
             SCCB_RegWrite(OV7725_SCCB_ADDR,OV7725_VFIX_REG, 0x80);
@@ -476,40 +476,40 @@ void OV7725_SpecialEffectConfigs(uint8_t mode)
 
 
 /*********************************************************************
- *����ͷSCCB�ײ�����
+ *摄像头SCCB底层驱动
  *
  ***********************************************************************/
 
 
 
 /*************************************************************************
-* �����������ܿƼ� KV58���ܳ�ĸ��           
+* 北京龙邱智能科技 KV58智能车母板           
 *
-*  �������ƣ�void SCCB_Init(void)
-*  ����˵��������SCCB��������ΪGPIO���ܣ���ʱ���������ݷ���
-*  ����˵������
-*  �������أ���
-*  �޸�ʱ�䣺2017��12��5��
-*  ��    ע��
+*  函数名称：void SCCB_Init(void)
+*  功能说明：配置SCCB所用引脚为GPIO功能，暂时不配置数据方向
+*  参数说明：无
+*  函数返回：无
+*  修改时间：2017年12月5日
+*  备    注：
 *************************************************************************/
 void SCCB_Init(void)
 {
-  GPIO_PinInit(SCCB_SCL_PIN, GPI_UP, 1);//����ΪGPIO����
-//   PORTE_BASE_PTR->PCR[4] |= 0x03; //����
-  GPIO_PinInit(SCCB_SDA_PIN, GPI_UP, 1);//����ΪGPIO����
-// PORTE_BASE_PTR->PCR[5] |= 0x03; //����
+  GPIO_PinInit(SCCB_SCL_PIN, GPI_UP, 1);//配置为GPIO功能
+//   PORTE_BASE_PTR->PCR[4] |= 0x03; //上拉
+  GPIO_PinInit(SCCB_SDA_PIN, GPI_UP, 1);//配置为GPIO功能
+// PORTE_BASE_PTR->PCR[5] |= 0x03; //上拉
 
 }
 
 /*************************************************************************
-* �����������ܿƼ� KV58���ܳ�ĸ��           
+* 北京龙邱智能科技 KV58智能车母板           
 *
-*  �������ƣ�void SCCB_Wait(void)
-*  ����˵����SCCB�ȴ���ʾ
-*  ����˵������
-*  �������أ���
-*  �޸�ʱ�䣺2017��12��5��
-*  ��    ע��
+*  函数名称：void SCCB_Wait(void)
+*  功能说明：SCCB等待演示
+*  参数说明：无
+*  函数返回：无
+*  修改时间：2017年12月5日
+*  备    注：
 *************************************************************************/
 void SCCB_Wait(void)
 {
@@ -521,14 +521,14 @@ void SCCB_Wait(void)
 }
 
 /*************************************************************************
-* �����������ܿƼ� KV58���ܳ�ĸ��           
+* 北京龙邱智能科技 KV58智能车母板           
 *
-*  �������ƣ�void SCCB_Star(void)
-*  ����˵������������
-*  ����˵������
-*  �������أ���
-*  �޸�ʱ�䣺2017��12��5��
-*  ��    ע��
+*  函数名称：void SCCB_Star(void)
+*  功能说明：启动函数
+*  参数说明：无
+*  函数返回：无
+*  修改时间：2017年12月5日
+*  备    注：
 *************************************************************************/
 void SCCB_Star(void)
 {
@@ -544,14 +544,14 @@ void SCCB_Star(void)
   SCCB_Wait();
 }
 /*************************************************************************
-* �����������ܿƼ� KV58���ܳ�ĸ��           
+* 北京龙邱智能科技 KV58智能车母板           
 *
-*  �������ƣ�void SCCB_Stop(void)
-*  ����˵����ֹͣ����
-*  ����˵������
-*  �������أ���
-*  �޸�ʱ�䣺2017��12��5��
-*  ��    ע��
+*  函数名称：void SCCB_Stop(void)
+*  功能说明：停止函数
+*  参数说明：无
+*  函数返回：无
+*  修改时间：2017年12月5日
+*  备    注：
 *************************************************************************/
 void SCCB_Stop(void)
 {
@@ -566,14 +566,14 @@ void SCCB_Stop(void)
   SCCB_Wait();  
 }
 /*************************************************************************
-* �����������ܿƼ� KV58���ܳ�ĸ��           
+* 北京龙邱智能科技 KV58智能车母板           
 *
-*  �������ƣ�uint8 SCCB_SendByte(uint8 Data)
-*  ����˵����SCCB�����ֽں���
-*  ����˵����Ҫ���͵��ֽ�
-*  �������أ�Ӧ���ź�
-*  �޸�ʱ�䣺2017��12��5��
-*  ��    ע��
+*  函数名称：uint8 SCCB_SendByte(uint8 Data)
+*  功能说明：SCCB发送字节函数
+*  参数说明：要发送的字节
+*  函数返回：应答信号
+*  修改时间：2017年12月5日
+*  备    注：
 *************************************************************************/
 uint8_t SCCB_SendByte(uint8_t Data)
 {
@@ -605,19 +605,19 @@ uint8_t SCCB_SendByte(uint8_t Data)
 /*************************************************************** 
 
 * 
-* �������ƣ�uint8 SCCB_ReadByte(void) 
-* ����˵����SCCB��ȡ�ֽں��� 
-* ����˵���� 
-* �������أ���ȡ�ֽ� 
-* �޸�ʱ�䣺2017��12��5�� 
-* �� ע�� 
+* 函数名称：uint8 SCCB_ReadByte(void) 
+* 功能说明：SCCB读取字节函数 
+* 参数说明： 
+* 函数返回：读取字节 
+* 修改时间：2017年12月5日 
+* 备 注： 
 ***************************************************************/ 
 uint8_t SCCB_ReadByte(void) 
 { 
   uint8_t i; 
   uint8_t byte = 0; 
   SCL_Out; 
-  SDA_In; //ʹ������
+  SDA_In; //使能输入
   for( i=0; i<8; i++) 
   { 
     SCCB_Wait(); 
@@ -636,12 +636,12 @@ uint8_t SCCB_ReadByte(void)
 /*************************************************************** 
 
 * 
-* �������ƣ�static void SCCB_Ack(void) 
-* ����˵����IIC�лظ��ź� 
-* ����˵���� 
-* �������أ�void 
-* �޸�ʱ�䣺2017��12��5�� 
-* �� ע�� 
+* 函数名称：static void SCCB_Ack(void) 
+* 功能说明：IIC有回复信号 
+* 参数说明： 
+* 函数返回：void 
+* 修改时间：2017年12月5日 
+* 备 注： 
 ***************************************************************/ 
 static void SCCB_Ack(void) 
 { 
@@ -658,12 +658,12 @@ static void SCCB_Ack(void)
 /*************************************************************** 
 
 * 
-* �������ƣ�static void SCCB_NAck(void) 
-* ����˵����IIC�޻ظ��ź� 
-* ����˵���� 
-* �������أ�void 
-* �޸�ʱ�䣺2017��12��5�� 
-* �� ע�� 
+* 函数名称：static void SCCB_NAck(void) 
+* 功能说明：IIC无回复信号 
+* 参数说明： 
+* 函数返回：void 
+* 修改时间：2017年12月5日 
+* 备 注： 
 ***************************************************************/ 
 static void SCCB_NAck(void) 
 { 
@@ -680,14 +680,14 @@ static void SCCB_NAck(void)
 } 
 
 /*************************************************************************
-* �����������ܿƼ� KV58���ܳ�ĸ��           
+* 北京龙邱智能科技 KV58智能车母板           
 *
-*  �������ƣ�void SCCB_RegWrite(uint8 Device,uint8 Address,uint16 Data)
-*  ����˵�������豸д���� 
-*  ����˵����Ҫ���͵��ֽ�
-*  �������أ�Ӧ���ź�
-*  �޸�ʱ�䣺2017��12��5��
-*  ��    ע��
+*  函数名称：void SCCB_RegWrite(uint8 Device,uint8 Address,uint16 Data)
+*  功能说明：向设备写数据 
+*  参数说明：要发送的字节
+*  函数返回：应答信号
+*  修改时间：2017年12月5日
+*  备    注：
 *************************************************************************/
 uint8_t SCCB_RegWrite(uint8 Device,uint8 Address,uint8_t Data)
 {
@@ -706,12 +706,12 @@ uint8_t SCCB_RegWrite(uint8 Device,uint8 Address,uint8_t Data)
 /*************************************************************** 
 
 * 
-* �������ƣ�uint8_t SCB_RegRead(uint8_t Device,uint8_t Address,uint16_t *Data) 
-* ����˵������ȡ���� 
-* ����˵���� 
-* �������أ�void 
-* �޸�ʱ�䣺2017��12��5�� 
-* �� ע�� 
+* 函数名称：uint8_t SCB_RegRead(uint8_t Device,uint8_t Address,uint16_t *Data) 
+* 功能说明：读取数据 
+* 参数说明： 
+* 函数返回：void 
+* 修改时间：2017年12月5日 
+* 备 注： 
 ***************************************************************/ 
 uint8_t SCCB_RegRead(uint8_t Device,uint8_t Address,uint8_t *Data) 
 {   
@@ -741,12 +741,12 @@ uint8_t SCCB_RegRead(uint8_t Device,uint8_t Address,uint8_t *Data)
 } 
 /***************************************************************  
 * 
-* �������ƣ�int SCCB_Probe(uint8_t chipAddr) 
-* ����˵������ѯ�õ�ַ���豸�Ƿ���� 
-* ����˵���� 
-* �������أ�void 
-* �޸�ʱ�䣺2017��12��5�� 
-* �� ע�� 
+* 函数名称：int SCCB_Probe(uint8_t chipAddr) 
+* 功能说明：查询该地址的设备是否存在 
+* 参数说明： 
+* 函数返回：void 
+* 修改时间：2017年12月5日 
+* 备 注： 
 ***************************************************************/ 
 int SCCB_Probe(uint8_t chipAddr) 
 { 

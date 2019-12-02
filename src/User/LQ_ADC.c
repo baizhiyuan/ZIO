@@ -64,7 +64,7 @@ uint16_t ADC_Get(uint8_t num)
         break;
         
       case 7:
-        return ADC_Mid(ADC0, ADC0_SE13, ADC_12bit);
+        return ADC_Mid(ADC1, ADC1_SE13, ADC_12bit);
         break;
         
       case 8:
@@ -149,6 +149,9 @@ void Test_ADC(void)
         batv6 = (uint16_t)(ADC_Get(6)*0.806);
         batv7 = (uint16_t)(ADC_Get(7)*0.806);
         batv8 = (uint16_t)(ADC_Get(8)*0.806);
+        batv9 = (uint16_t)(ADC_Get(9)*0.806);
+        batv10 = (uint16_t)(ADC_Get(10)*0.806);
+        batv11 = (uint16_t)(ADC_Get(11)*0.806);
           
         switch(KEY_Read(1))     //按键按下翻页
         {
@@ -171,7 +174,9 @@ void Test_ADC(void)
         
         if(0 == key)
         {
-            OLED_P8x16Str(4,0,(uint8_t*)"LQ ADC Test Bat"); 
+            printf("\r\n/AD11***********************%5d mv\r\n ",batv11);
+            sprintf(txt,"AD11:%5d mv ",batv11);
+            OLED_P8x16Str(20,0,(uint8_t*)txt);
             
             printf("\r\n/AD0***********************%5d mv\r\n ",batv0);
             sprintf(txt,"AD0:%5d mv ",batv0);
@@ -188,20 +193,20 @@ void Test_ADC(void)
         }
         if(1 == key)
         {
-            printf("\r\n/AD8***********************%5d mv\r\n ",batv8);
-            sprintf(txt,"AD8:%5d mv ",batv8);
+            printf("\r\n/AD3***********************%5d mv\r\n ",batv3);
+            sprintf(txt,"AD3:%5d mv ",batv3);
             OLED_P8x16Str(20,0,(uint8_t*)txt);
             
-            printf("\r\n/AD9***********************%5d mv\r\n ",batv9);
-            sprintf(txt,"AD9:%5d mv ",batv9);
+            printf("\r\n/AD4***********************%5d mv\r\n ",batv4);
+            sprintf(txt,"AD4:%5d mv ",batv4);
             OLED_P8x16Str(20,2,(uint8_t*)txt);
             
-            printf("\r\n/AD10***********************%5d mv\r\n ",batv10);
-            sprintf(txt,"AD10:%5d mv ",batv10);
+            printf("\r\n/AD5***********************%5d mv\r\n ",batv5);
+            sprintf(txt,"AD5:%5d mv ",batv5);
             OLED_P8x16Str(20,4,(uint8_t*)txt);
             
-            printf("\r\n/AD11***********************%5d mv\r\n ",batv11);
-            sprintf(txt,"AD11:%5d mv ",batv11);
+            printf("\r\n/AD6***********************%5d mv\r\n ",batv6);
+            sprintf(txt,"AD6:%5d mv ",batv6);
             OLED_P8x16Str(20,6,(uint8_t*)txt);    
         }
         if(2 == key)
@@ -213,6 +218,14 @@ void Test_ADC(void)
             printf("\r\n/AD8***********************%5d mv\r\n ",batv8);
             sprintf(txt,"AD8:%5d mv ",batv8);
             OLED_P8x16Str(20,2,(uint8_t*)txt);
+
+            printf("\r\n/AD9***********************%5d mv\r\n ",batv9);
+            sprintf(txt,"AD9:%5d mv ",batv9);
+            OLED_P8x16Str(20,4,(uint8_t*)txt);
+            
+            printf("\r\n/AD10***********************%5d mv\r\n ",batv10);
+            sprintf(txt,"AD8:%5d mv ",batv10);
+            OLED_P8x16Str(20,6,(uint8_t*)txt);
                
         }
    

@@ -12,39 +12,23 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #include "include.h"
 #include "LQ_12864.h"
 
-#if OLED_PIN
-/*  母板上的引脚 */
-#define OLED_DC 	PTC13_OUT  
-#define OLED_RST	PTC14_OUT 
-#define OLED_SDA	PTC15_OUT  
-#define OLED_SCL	PTC16_OUT  
-
-#else
 /*  核心板板上的引脚 */
 #define OLED_DC 	PTC19_OUT  
 #define OLED_RST	PTC18_OUT 
 #define OLED_SDA	PTC17_OUT  
 #define OLED_SCL	PTC16_OUT 
-#endif
+
 #define X_WIDTH 132
 #define Y_WIDTH 64
 
 void OLED_Init(void)        
 { 
-    //-----端口初始化----//
-#if OLED_PIN
-    /*  母板上的引脚 */
-    GPIO_PinInit(PTC13,GPO,0);
-    GPIO_PinInit(PTC14,GPO,0);
-    GPIO_PinInit(PTC15,GPO,0);
-    GPIO_PinInit(PTC16,GPO,0); 
-#else    
     /*  核心板板上的引脚 */
     GPIO_PinInit(PTC19,GPO,0);
     GPIO_PinInit(PTC18,GPO,0);
     GPIO_PinInit(PTC17,GPO,0);
     GPIO_PinInit(PTC16,GPO,0);
-#endif   
+//#endif   
     OLED_SCL=1;
     //OLED_CS=1;	//预制SLK和SS为高电平               
     OLED_RST=0;

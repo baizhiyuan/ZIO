@@ -1,77 +1,77 @@
 /*LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-¡¾Æ½    Ì¨¡¿±±¾©ÁúÇñÖÇÄÜ¿Æ¼¼MK66FX1M0VLQ18ºËÐÄ°å
-¡¾±à    Ð´¡¿CHIUSIR
-¡¾±¸    ×¢¡¿
-¡¾Èí¼þ°æ±¾¡¿V1.0
-¡¾×îºó¸üÐÂ¡¿2018Äê4ÔÂ23ÈÕ
-¡¾Ïà¹ØÐÅÏ¢²Î¿¼ÏÂÁÐµØÖ·¡¿
-¡¾Íø    Õ¾¡¿http://www.lqist.cn
-¡¾ÌÔ±¦µêÆÌ¡¿http://shop36265907.taobao.com
-¡¾½»Á÷ÓÊÏä¡¿chiusir@163.com
+ã€å¹³    å°ã€‘åŒ—äº¬é¾™é‚±æ™ºèƒ½ç§‘æŠ€MK66FX1M0VLQ18æ ¸å¿ƒæ¿
+ã€ç¼–    å†™ã€‘CHIUSIR
+ã€å¤‡    æ³¨ã€‘
+ã€è½¯ä»¶ç‰ˆæœ¬ã€‘V1.0
+ã€æœ€åŽæ›´æ–°ã€‘2018å¹´4æœˆ23æ—¥
+ã€ç›¸å…³ä¿¡æ¯å‚è€ƒä¸‹åˆ—åœ°å€ã€‘
+ã€ç½‘    ç«™ã€‘http://www.lqist.cn
+ã€æ·˜å®åº—é“ºã€‘http://shop36265907.taobao.com
+ã€äº¤æµé‚®ç®±ã€‘chiusir@163.com
 QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #ifndef __LQ_MT9V034_H_
 #define __LQ_MT9V034_H_
 
-#define MT9V034_IMAGEH  120  //ÐÐ HEIGHT ´ý²É¼¯ÉãÏñÍ·Í¼Ïñ¸ß¶ÈÐÐÊý
-#define MT9V034_IMAGEW  188  //ÁÐ WIDTH  ´ý²É¼¯ÉãÏñÍ·Í¼Ïñ¿í¶ÈÁÐÊý
+#define MT9V034_IMAGEH  120  //è¡Œ HEIGHT å¾…é‡‡é›†æ‘„åƒå¤´å›¾åƒé«˜åº¦è¡Œæ•°
+#define MT9V034_IMAGEW  188  //åˆ— WIDTH  å¾…é‡‡é›†æ‘„åƒå¤´å›¾åƒå®½åº¦åˆ—æ•°
 
 
-#define SCCB_SCL_PIN  PTE1       //Ä£ÄâIICµÄSCLÐÅºÅ  1.ÐÞ¸ÄÒý½Å¼´¿ÉÐÞ¸ÄSCCB½Ó¿Ú
-#define SCCB_SDA_PIN  PTE0       //Ä£ÄâIICµÄSDAÐÅºÅ
+#define SCCB_SCL_PIN  PTE1       //æ¨¡æ‹ŸIICçš„SCLä¿¡å·  1.ä¿®æ”¹å¼•è„šå³å¯ä¿®æ”¹SCCBæŽ¥å£
+#define SCCB_SDA_PIN  PTE0       //æ¨¡æ‹ŸIICçš„SDAä¿¡å·
 
-#define SCL_Out     GPIO_PinSetDir(SCCB_SCL_PIN, 1);	//Êä³ö      //ÅäÖÃÊä³ö×÷ÎªSCL_Out
-#define SDA_Out     GPIO_PinSetDir(SCCB_SDA_PIN, 1);	//Êä³ö      //ÅäÖÃ×÷ÎªÊä³ö×÷ÎªSDA_Out
-#define SDA_In      GPIO_PinSetDir(SCCB_SDA_PIN, 0);    //ÊäÈë      //ÅäÖÃ×÷ÎªÊäÈë×÷ÎªSDA_In
+#define SCL_Out     GPIO_PinSetDir(SCCB_SCL_PIN, 1);	//è¾“å‡º      //é…ç½®è¾“å‡ºä½œä¸ºSCL_Out
+#define SDA_Out     GPIO_PinSetDir(SCCB_SDA_PIN, 1);	//è¾“å‡º      //é…ç½®ä½œä¸ºè¾“å‡ºä½œä¸ºSDA_Out
+#define SDA_In      GPIO_PinSetDir(SCCB_SDA_PIN, 0);    //è¾“å…¥      //é…ç½®ä½œä¸ºè¾“å…¥ä½œä¸ºSDA_In
 
-#define SCL_High    PTE1_OUT=1   //ÅäÖÃÊä³ö¸ßµçÆ½    2.ÐÞ¸ÄÒý½Å¼´¿ÉÐÞ¸ÄSCCB½Ó¿Ú
-#define SCL_Low     PTE1_OUT=0   //ÅäÖÃÊä³öµÍµçÆ½
-#define SDA_High    PTE0_OUT=1   //ÅäÖÃÊä³ö¸ßµçÆ½
-#define SDA_Low     PTE0_OUT=0   //ÅäÖÃÊä³öµÍµçÆ½
-#define SDA_Data    PTE0_IN      //¶ÁÈ¡Òý½ÅÉÏµÄÒý½Å×´Ì¬
+#define SCL_High    PTE1_OUT=1   //é…ç½®è¾“å‡ºé«˜ç”µå¹³    2.ä¿®æ”¹å¼•è„šå³å¯ä¿®æ”¹SCCBæŽ¥å£
+#define SCL_Low     PTE1_OUT=0   //é…ç½®è¾“å‡ºä½Žç”µå¹³
+#define SDA_High    PTE0_OUT=1   //é…ç½®è¾“å‡ºé«˜ç”µå¹³
+#define SDA_Low     PTE0_OUT=0   //é…ç½®è¾“å‡ºä½Žç”µå¹³
+#define SDA_Data    PTE0_IN      //è¯»å–å¼•è„šä¸Šçš„å¼•è„šçŠ¶æ€
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿LQMT9V034_Init
-¡¾¹¦    ÄÜ¡¿ÉãÏñÍ·³õÊ¼»¯
-¡¾²Î    Êý¡¿fps  Ö¡ÂÊ   
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿ÍÆ¼öÊ¹ÓÃ50Ö¡µÄ
-¡¾×¢ÒâÊÂÏî¡¿×¢ÒâK60ÐÔÄÜÓÐÏÞ£¬Ì«¸ßÖ¡ÂÊ»á³öÎÊÌâ
+ã€å‡½    æ•°ã€‘LQMT9V034_Init
+ã€åŠŸ    èƒ½ã€‘æ‘„åƒå¤´åˆå§‹åŒ–
+ã€å‚    æ•°ã€‘fps  å¸§çŽ‡   
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘æŽ¨èä½¿ç”¨50å¸§çš„
+ã€æ³¨æ„äº‹é¡¹ã€‘æ³¨æ„K60æ€§èƒ½æœ‰é™ï¼Œå¤ªé«˜å¸§çŽ‡ä¼šå‡ºé—®é¢˜
 --------------------------------------------------------------------------------------------------------*/
 void LQMT9V034_Init(uint8_t fps);
 
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿LQMT9V034_Init
-¡¾¹¦    ÄÜ¡¿ÉãÏñÍ·³õÊ¼»¯
-¡¾²Î    Êý¡¿fps     Ö¡ÂÊ 
-¡¾²Î    Êý¡¿height  Í¼Ïñ¸ß¶È
-¡¾²Î    Êý¡¿width   Í¼Ïñ¿í¶È  
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿ÍÆ¼öÊ¹ÓÃ50Ö¡µÄ
-¡¾×¢ÒâÊÂÏî¡¿×¢ÒâK60ÐÔÄÜÓÐÏÞ£¬Ì«¸ßÖ¡ÂÊ»á³öÎÊÌâ
+ã€å‡½    æ•°ã€‘LQMT9V034_Init
+ã€åŠŸ    èƒ½ã€‘æ‘„åƒå¤´åˆå§‹åŒ–
+ã€å‚    æ•°ã€‘fps     å¸§çŽ‡ 
+ã€å‚    æ•°ã€‘height  å›¾åƒé«˜åº¦
+ã€å‚    æ•°ã€‘width   å›¾åƒå®½åº¦  
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘æŽ¨èä½¿ç”¨50å¸§çš„
+ã€æ³¨æ„äº‹é¡¹ã€‘æ³¨æ„K60æ€§èƒ½æœ‰é™ï¼Œå¤ªé«˜å¸§çŽ‡ä¼šå‡ºé—®é¢˜
 --------------------------------------------------------------------------------------------------------*/
 static void MT9V034_SetFrameResolution(uint16_t height,uint16_t width, uint8_t fps);
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿MT9V034_SetAutoExposure
-¡¾¹¦    ÄÜ¡¿×Ô¶¯ÆØ¹â
-¡¾²Î    Êý¡¿enable     1Ê¹ÄÜ
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿ÍÆ¼öÊ¹ÓÃ50Ö¡µÄ
-¡¾×¢ÒâÊÂÏî¡¿×¢ÒâK60ÐÔÄÜÓÐÏÞ£¬Ì«¸ßÖ¡ÂÊ»á³öÎÊÌâ
+ã€å‡½    æ•°ã€‘MT9V034_SetAutoExposure
+ã€åŠŸ    èƒ½ã€‘è‡ªåŠ¨æ›å…‰
+ã€å‚    æ•°ã€‘enable     1ä½¿èƒ½
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘æŽ¨èä½¿ç”¨50å¸§çš„
+ã€æ³¨æ„äº‹é¡¹ã€‘æ³¨æ„K60æ€§èƒ½æœ‰é™ï¼Œå¤ªé«˜å¸§çŽ‡ä¼šå‡ºé—®é¢˜
 --------------------------------------------------------------------------------------------------------*/
 void MT9V034_SetAutoExposure(char enable);
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿MT9V034_Default_Settings
-¡¾¹¦    ÄÜ¡¿ÉãÏñÍ·Ä¬ÈÏÅäÖÃ³õÊ¼»¯ 
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿
-¡¾×¢ÒâÊÂÏî¡¿
+ã€å‡½    æ•°ã€‘MT9V034_Default_Settings
+ã€åŠŸ    èƒ½ã€‘æ‘„åƒå¤´é»˜è®¤é…ç½®åˆå§‹åŒ– 
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘
+ã€æ³¨æ„äº‹é¡¹ã€‘
 --------------------------------------------------------------------------------------------------------*/
 void MT9V034_Default_Settings(void);
 
@@ -79,8 +79,8 @@ void MT9V034_Default_Settings(void);
 
 
 /*********************************************************************
- *ÉãÏñÍ·SCCBµ×²ãÇý¶¯
- *ÄÚ²¿µ÷ÓÃ
+ *æ‘„åƒå¤´SCCBåº•å±‚é©±åŠ¨
+ *å†…éƒ¨è°ƒç”¨
  ***********************************************************************/
 void SCCB_Init(void);
 void SCCB_Wait(void);

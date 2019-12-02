@@ -12,8 +12,6 @@
 ----------------------------------------------------------------*/
 #include "include.h"
 
-
-
 //------------------------------------------------------------------------------------------------    
 //全局变量  用于测试按键外部中断
 //------------------------------------------------------------------------------------------------
@@ -69,7 +67,8 @@ extern volatile uint8 step_flag;
 uint16 step_num;
 int16 step_target;
 uint8 step_last;
-
+extern volatile uint8_t pit0_flag;
+extern volatile uint8_t pit2_flag;
 /*---------------------------------------------------------------
 【函    数】PIT0_Interrupt
 【功    能】PIT0的中断服务函数
@@ -80,8 +79,9 @@ uint8 step_last;
 void PIT0_IRQHandler()
 {
     Timer_IQR_handle();
-	LED_Reverse(1);
     PIT_Flag_Clear(PIT0);       //清中断标志位
+    
+    //pit0_flag = 1;
     /*用户添加所需代码*/  
 }
 /*---------------------------------------------------------------
@@ -94,13 +94,13 @@ void PIT0_IRQHandler()
 void PIT1_IRQHandler()//步进电机中断
 {
 	if (step_flag == 0){
-		step_target = 3500;
+		step_target = 2780;//为了初始化步进电机的定位
 		GPIO_PinWrite(PTE28, 0);
 		step_flag = 2;
 		step_last = step_flag;
 	}
 	if(step_flag != step_last){
-		step_target = (step_flag - step_last) * 2200;
+		step_target = (step_flag - step_last) * 2720;
 		if (step_target > 0){
 			GPIO_PinWrite(PTE28, 0);
 		}else if (step_target < 0){
@@ -119,6 +119,7 @@ void PIT1_IRQHandler()//步进电机中断
 		step_target = 0;
 	}
 	PIT_Flag_Clear(PIT1);       //清中断标志位
+   // pit2_flag = 1;
 }
 /*---------------------------------------------------------------
 【函    数】PIT2_Interrupt
@@ -129,10 +130,10 @@ void PIT1_IRQHandler()//步进电机中断
 ----------------------------------------------------------------*/
 void PIT2_IRQHandler()//显示屏中断
 {
-    Show_IQR_handle();
+    //Show_IQR_handle();
     PIT_Flag_Clear(PIT2);       //清中断标志位
+   // pit2_flag = 1;
     /*用户添加所需代码*/
-    pit2_test_flag = 1;
 }
 /*---------------------------------------------------------------
 【函    数】PIT3_Interrupt
@@ -145,13 +146,12 @@ void PIT3_IRQHandler()
 {
     PIT_Flag_Clear(PIT3);       //清中断标志位
     /*用户添加所需代码*/
-    pit3_test_flag = 1;
+    pit3_test_flag = 1;//一般中断就用一个flag
 }
 
 /////////////////////////////////////////////////////////////////
 ///////////////串口中断服务函数/////////////////////////////////
 /////////////////////////////////////////////////////////////////
-
 /*---------------------------------------------------------------
 【函    数】DMA_CH4_Handler
 【功    能】DMA通道4的中断服务函数
@@ -159,6 +159,30 @@ void PIT3_IRQHandler()
 【返 回 值】无
 【注意事项】注意进入后要清除中断标志位
 ----------------------------------------------------------------*/
+/*******************************/
+uint8_t pi_receive_tmp;
+uint8_t pi_dat[6] = {0, 0, 0, 0, 0};
+uint8_t pi_getbuf[3] = {0,0,0};
+
+void UART2_RX_TX_IRQHandler(void)
+{ 
+    if(UART2_S1 & UART_S1_RDRF_MASK)                                     //接收数据寄存器满
+    {
+      pi_receive_tmp = UART_GetChar(UART2);
+      for(uint8 i = 0; i < 6 - 1; i++)
+      {
+          pi_dat[i] = pi_dat[i + 1];
+      }
+      pi_dat[5 - 1] = pi_receive_tmp;
+      if(pi_dat[0] == 0x55 && pi_dat[1] == 0x55 && pi_dat[6 - 1] == 0x50)
+      {
+          pi_getbuf[0] = pi_dat[2];
+          pi_getbuf[1] = pi_dat[3];
+          pi_getbuf[2] = pi_dat[4];
+      }
+     }
+}
+/*******************************/
 void UART4_RX_TX_IRQHandler(void)
 {
     if(UART4_S1 & UART_S1_RDRF_MASK)                                     //接收数据寄存器满

@@ -39,26 +39,20 @@
 #include "LQ_LPTMR.h"              /* LPTMR       例子 */
 #include "LQ_SYSTICK.h"            /* SYSTICK     例子 */
 #include "LQ_12864.h"              /* OLED        驱动 */
-#include "LQ_SGP18T.h"             /* TFT1.8      驱动 */
 #include "LQ_ADC.h"                /* ADC         例子 */
 #include "LQ_WDOG.h"               /* WDOG        例子 */
-#include "LQ_SD5.h"                /* 舵机        例子 */
 #include "LQ_MOTOR.h"              /* 电机        例子 */
 #include "LQ_MPU6050.h"            /* 6050        例子 */
 #include "LQ_9AX.h"                /* 九轴        例子 */
-#include "LQ_MT9V034.h"            /* 神眼        驱动 */
-#include "LQ_CAMERA.h"             /* 摄像头      例子 */
 #include "LQ_FLASH.h"              /* FLASH       例子 */
-#include "LQ_CCD.h"                /* CCD         例子 */
 #include "LQ_Ultrasonic.h"         /* 超声波测距  例子 */
 #include "ANO_DT.h"
-#include "LQ_VL53.h"               /* VL53测距    例子 */
 #include "ZIO_Car.h"               /* VL53测距    例子 */
+//#include "JY901.h"
 
 
 /* 在OLED 上显示或者在TFT1.8显示 */
-#define LQ_OLED     
-//#define LQ_TFT1_8       
+#define LQ_OLED         
    
 
 #endif

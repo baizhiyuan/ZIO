@@ -15,8 +15,6 @@
 -------------------------------------------------------------*/
 
 #include "include.h"
-
-
 /**
   * @brief    测试VL53
   *
@@ -60,25 +58,26 @@ void Test_Vl53(void)
         
         /* 获取测量数据 */
 		VL53_Read_nByte(VL53ADDR, VL53_REG_DIS, 2, dis_buff);
-
-        VL53_Write_nByte(VL53ADDR, VL53L0X_REG_SYSRANGE_STOP, 1, &VL53_STAR);
         
         /* 转换数据 */
-       // dis = (dis_buff[0]<<8) | (dis_buff[1]);
-       /* if(dis > 8000)
+        dis = (dis_buff[0]<<8) | (dis_buff[1]);
+        if(dis > 8000)
         {
             dis = 0;
-        }*/
-        float distanceInches = dis * 0.0393701;
-        float distanceFeet = distanceInches / 12.0;
-		sprintf(txt, "DIS %5d mm",distanceFeet);
+        }
+		sprintf(txt, "DIS %5d mm",dis);
+#ifdef LQ_OLED
 		OLED_P8x16Str(0,5,txt);
+#else
+		TFTSPI_P8X16Str(2,5,txt,u16RED,u16BLUE);
+#endif
 		delayms(50);
 		LED_Reverse(1);
     
     }
     
 }
+
 
 /**
   * @brief    VL53 写n个寄存器

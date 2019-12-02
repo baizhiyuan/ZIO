@@ -1,45 +1,45 @@
 /*-----------------------------------------------------------------------------------------------------
-¡¾Æ½    Ì¨¡¿ÁúÇñK60ºËÐÄ°å-ÖÇÄÜ³µ°å
-¡¾±à    Ð´¡¿LQ-005
-¡¾E-mail  ¡¿chiusir@163.com
-¡¾Èí¼þ°æ±¾¡¿V1.0£¬ÁúÇñ¿ªÔ´´úÂë£¬½ö¹©²Î¿¼£¬ºó¹û×Ô¸º
-¡¾×îºó¸üÐÂ¡¿2019Äê04ÔÂ02ÈÕ
-¡¾Íø    Õ¾¡¿http://www.lqist.cn
-¡¾ÌÔ±¦µêÆÌ¡¿http://shop36265907.taobao.com
-¡¾±àÒëÆ½Ì¨¡¿IAR 8.2
-¡¾¹¦    ÄÜ¡¿FLASH ¶ÁÐ´Àý×Ó
-¡¾×¢ÒâÊÂÏî¡¿²»ÒªÐ´¿¿Ç°µÄÉÈÇø  »á¸²¸Ç³ÌÐò
+ã€å¹³    å°ã€‘é¾™é‚±K60æ ¸å¿ƒæ¿-æ™ºèƒ½è½¦æ¿
+ã€ç¼–    å†™ã€‘LQ-005
+ã€E-mail  ã€‘chiusir@163.com
+ã€è½¯ä»¶ç‰ˆæœ¬ã€‘V1.0ï¼Œé¾™é‚±å¼€æºä»£ç ï¼Œä»…ä¾›å‚è€ƒï¼ŒåŽæžœè‡ªè´Ÿ
+ã€æœ€åŽæ›´æ–°ã€‘2019å¹´04æœˆ02æ—¥
+ã€ç½‘    ç«™ã€‘http://www.lqist.cn
+ã€æ·˜å®åº—é“ºã€‘http://shop36265907.taobao.com
+ã€ç¼–è¯‘å¹³å°ã€‘IAR 8.2
+ã€åŠŸ    èƒ½ã€‘FLASH è¯»å†™ä¾‹å­
+ã€æ³¨æ„äº‹é¡¹ã€‘ä¸è¦å†™é å‰çš„æ‰‡åŒº  ä¼šè¦†ç›–ç¨‹åº
 -------------------------------------------------------------------------------------------------------*/
 #include "include.h"
 
 
 
 /*------------------------------------------------------------------------------------------------------
-¡¾º¯    Êý¡¿Test_Flash
-¡¾¹¦    ÄÜ¡¿²âÊÔflash ¶ÁÐ´
-¡¾²Î    Êý¡¿ÎÞ
-¡¾·µ »Ø Öµ¡¿ÎÞ
-¡¾Êµ    Àý¡¿Test_Flash(); 
-¡¾×¢ÒâÊÂÏî¡¿
+ã€å‡½    æ•°ã€‘Test_Flash
+ã€åŠŸ    èƒ½ã€‘æµ‹è¯•flash è¯»å†™
+ã€å‚    æ•°ã€‘æ— 
+ã€è¿” å›ž å€¼ã€‘æ— 
+ã€å®ž    ä¾‹ã€‘Test_Flash(); 
+ã€æ³¨æ„äº‹é¡¹ã€‘
 --------------------------------------------------------------------------------------------------------*/
 void Test_Flash(void)
 {
 	UART_Init(UART4, 115200);
-    OLED_Init();                  //LCD³õÊ¼»¯
-    OLED_CLS();                   //LCDÇåÆÁ
+    OLED_Init();                  //LCDåˆå§‹åŒ–
+    OLED_CLS();                   //LCDæ¸…å±
 	KEY_Init();
 	FLASH_Init();
     OLED_P8x16Str(15,0,"LQ FLASH Test"); 
     printf("\r\nLQ FLASH Test");
-	printf("\r\n²»ÒªÐ´¿¿Ç°µÄÉÈÇø  »á¸²¸Ç³ÌÐò");
+	//printf("\r\nä¸è¦å†™é å‰çš„æ‰‡åŒº  ä¼šè¦†ç›–ç¨‹åº");
 	
     uint8_t  write_data[8] = {1,2,3,4,5,6,7,8};
     uint8_t  read_data[8]  = {0};
     
 	FLASH_EraseSector(1);
-    FLASH_WriteBuf(1,write_data, 8, 0);//Ð´ÈëÉÈÇø
+    FLASH_WriteBuf(1,write_data, 8, 0);//å†™å…¥æ‰‡åŒº
     
-	/* ´Óµ¹ÊýµÚÒ»¸öÉÈÇø 0Æ«ÒÆÎ»ÖÃ¿ªÊ¼ ¶Á³ö½á¹¹ÌåÊý¾Ý */
+	/* ä»Žå€’æ•°ç¬¬ä¸€ä¸ªæ‰‡åŒº 0åç§»ä½ç½®å¼€å§‹ è¯»å‡ºç»“æž„ä½“æ•°æ® */
 	read_data[0] = FLASH_Read(1, 0, uint8_t);
     read_data[1] = FLASH_Read(1, 1, uint8_t);
     read_data[2] = FLASH_Read(1, 2, uint8_t);

@@ -45,7 +45,7 @@ uint8_t KEY_Read(uint8_t mode)
     {
       key_up=1;      //支持连按
     }
-    if(key_up && (GPIO_PinRead(PTB20)==0 || GPIO_PinRead(PTB21)==0) || GPIO_PinRead(PTB22)==0)
+    if(key_up && (GPIO_PinRead(PTB20)==0 || GPIO_PinRead(PTB21)==0 || GPIO_PinRead(PTB22)==0))
     {
       delayms(100);   //消抖
       key_up=0;

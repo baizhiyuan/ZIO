@@ -34,22 +34,22 @@ typedef void (*flash_run_entry_t)(volatile uint8 *reg);
 flash_run_entry_t s_flash_run_entry;
     
 
-//å†…éƒ¨ä½¿ç”¨
+//ÄÚ²¿Ê¹ÓÃ
 __STATIC_INLINE uint8 FlashCmdStart(void)
 {
-	//æ¸…æ¥šå‘½ä»¤ç»“æœæ ‡å¿—ä½
+	//Çå³şÃüÁî½á¹û±êÖ¾Î»
     FTFE->FSTAT = ACCERR | FPVIOL;
     s_flash_run_entry = (flash_run_entry_t)((uint32)s_flash_command_run + 1);
     s_flash_run_entry(&FTFE->FSTAT);
     
-    if(FTFE->FSTAT & (ACCERR | FPVIOL | MGSTAT0)) return 1;	//å‡ºç°é”™è¯¯
-    return 0;//æˆåŠŸ
+    if(FTFE->FSTAT & (ACCERR | FPVIOL | MGSTAT0)) return 1;	//³öÏÖ´íÎó
+    return 0;//³É¹¦
 
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      FLASHåˆå§‹åŒ–
-//  @return     				è¿”å›ä¸€ä¸ªæ‰‡åŒºçš„å¤§å°
+//  @brief      FLASH³õÊ¼»¯
+//  @return     				·µ»ØÒ»¸öÉÈÇøµÄ´óĞ¡
 //  @since      v1.0
 //  Sample usage:               uint32 dat = FLASH_GetSectorSize();
 //-------------------------------------------------------------------------------------------------------------------
@@ -59,21 +59,21 @@ uint32 FLASH_GetSectorSize(void)
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      FLASHåˆå§‹åŒ–
+//  @brief      FLASH³õÊ¼»¯
 //  @return     void
 //  @since      v1.0
 //  Sample usage:
 //-------------------------------------------------------------------------------------------------------------------
 void FLASH_Init(void)
 {
-    //æ¸…æ¥šçŠ¶æ€æ ‡è¯†
+    //Çå³ş×´Ì¬±êÊ¶
     FTFE->FSTAT = ACCERR | FPVIOL;
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      FLASHæ“¦é™¤æ‰‡åŒº
-//  @param      SectorNum 		éœ€è¦æ“¦é™¤çš„æ‰‡åŒºç¼–å·
-//  @return     				è¿”å›1æ“¦é™¤å¤±è´¥ï¼Œè¿”å›0æ“¦é™¤æˆåŠŸ
+//  @brief      FLASH²Á³ıÉÈÇø
+//  @param      SectorNum 		ĞèÒª²Á³ıµÄÉÈÇø±àºÅ
+//  @return     				·µ»Ø1²Á³ıÊ§°Ü£¬·µ»Ø0²Á³ı³É¹¦
 //  @since      v1.0
 //  Sample usage:               uint32 dat = FLASH_GetSectorSize(10);
 //-------------------------------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ uint8 FLASH_EraseSector(uint32 SectorNum)
 
 	dest.word = (uint32)(FLASH_SECTOR_NUM - SectorNum)*SECTOR_SIZE;
 
-	//è®¾ç½®å‘½ä»¤
+	//ÉèÖÃÃüÁî
 	FTFE->FCCOB0 = ERSSCR; 
 	FTFE->FCCOB1 = dest.byte[2];
 	FTFE->FCCOB2 = dest.byte[1];
@@ -101,14 +101,14 @@ uint8 FLASH_EraseSector(uint32 SectorNum)
     return ret;
 }
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      FLASHæ•°æ®å†™å…¥åˆ°æ‰‡åŒº
-//  @param      SectorNum 		éœ€è¦å†™å…¥çš„æ‰‡åŒºç¼–å·
-//  @param      *buf	 		æ•°æ®é¦–åœ°å€
-//  @param      len		 		å†™å…¥çš„å­—èŠ‚æ•° ç‰¹åˆ«æé†’ä¸€ä¸ªuint16å˜é‡æ˜¯ä¸¤ä¸ªå­—èŠ‚ ä¸€ä¸ªuint32å˜é‡æ˜¯å››ä¸ªå­—èŠ‚
-//  @param      offset		 	å¿…é¡»ä¸º4çš„æ•´æ•°å€
-//  @return     				è¿”å›1å†™å…¥å¤±è´¥ï¼Œè¿”å›0å†™å…¥æˆåŠŸ
+//  @brief      FLASHÊı¾İĞ´Èëµ½ÉÈÇø
+//  @param      SectorNum 		ĞèÒªĞ´ÈëµÄÉÈÇø±àºÅ
+//  @param      *buf	 		Êı¾İÊ×µØÖ·
+//  @param      len		 		Ğ´ÈëµÄ×Ö½ÚÊı ÌØ±ğÌáĞÑÒ»¸öuint16±äÁ¿ÊÇÁ½¸ö×Ö½Ú Ò»¸öuint32±äÁ¿ÊÇËÄ¸ö×Ö½Ú
+//  @param      offset		 	±ØĞëÎª4µÄÕûÊı±¶
+//  @return     				·µ»Ø1Ğ´ÈëÊ§°Ü£¬·µ»Ø0Ğ´Èë³É¹¦
 //  @since      v1.0
-//  Sample usage:               FLASH_WriteSector(10,(const uint8 *)buf,4,0);//å°†bufæ•°ç»„é‡Œé¢çš„å‰å››ä½æ•°æ®å†™å…¥åˆ°10å·æ‰‡åŒº(æ¯ä¸€ä½æ˜¯uint8ç±»å‹)
+//  Sample usage:               FLASH_WriteSector(10,(const uint8 *)buf,4,0);//½«bufÊı×éÀïÃæµÄÇ°ËÄÎ»Êı¾İĞ´Èëµ½10ºÅÉÈÇø(Ã¿Ò»Î»ÊÇuint8ÀàĞÍ)
 //-------------------------------------------------------------------------------------------------------------------
 uint8 FLASH_WriteBuf(uint32 SectorNum, const uint8 *buf, uint32 len, uint32 offset)
 {
@@ -126,11 +126,11 @@ uint8 FLASH_WriteBuf(uint32 SectorNum, const uint8 *buf, uint32 len, uint32 offs
 
 	for(i=0; i<len; i+=step)
 	{
-        //è®¾ç½®åœ°å€
+        //ÉèÖÃµØÖ·
 		FTFE->FCCOB1 = dest.byte[2];
 		FTFE->FCCOB2 = dest.byte[1];
 		FTFE->FCCOB3 = dest.byte[0];
-		//è®¾ç½®æ•°æ®
+		//ÉèÖÃÊı¾İ
 		FTFE->FCCOB4 = buf[3];
 		FTFE->FCCOB5 = buf[2];
 		FTFE->FCCOB6 = buf[1];

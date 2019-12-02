@@ -1,31 +1,31 @@
-/******************** LQ_K60_函数库 v1.0 ********************
- * 文件名           ：PLL.c
- * 功能             ：设置工作时钟模式，锁相环，即超频
- * 备注             ：官方例程上修改
- * 日期             ：2015-10-16
- * 实验平台         ：龙丘 k60 vg板 
- * 开发环境         ：IAR 7.3
- * 作者             ：龙丘技术 006
- * 淘宝店           ：https://longqiu.taobao.com
- * 龙丘智能车讨论群 ：202949437
+/******************** LQ_K60_������ v1.0 ********************
+ * �ļ���           ��PLL.c
+ * ����             �����ù���ʱ��ģʽ�����໷������Ƶ
+ * ��ע             ���ٷ��������޸�
+ * ����             ��2015-10-16
+ * ʵ��ƽ̨         ������ k60 vg�� 
+ * ��������         ��IAR 7.3
+ * ����             �������� 006
+ * �Ա���           ��https://longqiu.taobao.com
+ * �������ܳ�����Ⱥ ��202949437
 *************************************************************/
 #include "include.h"
 #include "MK60_PLL.h"
 
-uint8_t core_clk;//单位MHZ
-uint8_t bus_clk;//单位MHZ
+uint8_t core_clk;//��λMHZ
+uint8_t bus_clk;//��λMHZ
 
 /*************************************************************************
-*                        龙丘智能科技有限公司
+*                        �������ܿƼ����޹�˾
 *
-*  函数名称：pll_init
-*  功能说明：时钟初始化，用于设定频率。
-*  参数说明：PLL_?
-*  函数返回：无
-*  修改时间：2016-8-20
-*  备    注：内核时钟（系统时钟）=外部时钟（50M晶振频率）/ (pll_prdiv+1)*(pll_vdiv+16);
+*  �������ƣ�pll_init
+*  ����˵����ʱ�ӳ�ʼ���������趨Ƶ�ʡ�
+*  ����˵����PLL_?
+*  �������أ���
+*  �޸�ʱ�䣺2016-8-20
+*  ��    ע���ں�ʱ�ӣ�ϵͳʱ�ӣ�=�ⲿʱ�ӣ�50M����Ƶ�ʣ�/ (pll_prdiv+1)*(pll_vdiv+16);
              MCG=PLL, core = MCG, bus = MCG/5, FlexBus = MCG/3, Flash clock= MCG/8
-*  例    子：pll_init(PLL180);
+*  ��    �ӣ�pll_init(PLL180);
 *************************************************************************/
 void PLL_Init(clk_option opt)
 {
@@ -42,7 +42,7 @@ void PLL_Init(clk_option opt)
 
     if(opt!= PLLUNULL )
     {
-        //设置PLL时钟
+        //����PLLʱ��
         switch(opt)
         {
         case PLL80:
@@ -98,41 +98,41 @@ void PLL_Init(clk_option opt)
             pll_vdiv        = 29;
             break;
         case PLL230:
-            pll_prdiv       = 4;    //稳定
+            pll_prdiv       = 4;    //�ȶ�
             pll_vdiv        = 30;
             break;
        case PLL235:
-            pll_prdiv       = 4;    //不稳定
+            pll_prdiv       = 4;    //���ȶ�
             pll_vdiv        = 31;
             break;
-       case PLL237_5:               //很不稳定
+       case PLL237_5:               //�ܲ��ȶ�
             pll_prdiv       = 3;
             pll_vdiv        = 22;
             break;
-        default:               break;//(初始化未成功，系统默认系统时钟为180M)
+        default:               break;//(��ʼ��δ�ɹ���ϵͳĬ��ϵͳʱ��Ϊ180M)
 
         }
     }
-    MCG_C1 = MCG_C1_CLKS(2) ;//选择外部时钟
+    MCG_C1 = MCG_C1_CLKS(2) ;//ѡ���ⲿʱ��
 
 
-    MCG_C5 = MCG_C5_PRDIV(pll_prdiv);//晶振为50M，分频结果范围要在8M~16M 此时为 50/(prdiv+1)
+    MCG_C5 = MCG_C5_PRDIV(pll_prdiv);//����Ϊ50M����Ƶ�����ΧҪ��8M~16M ��ʱΪ 50/(prdiv+1)
 
 
    temp_reg = FMC_PFAPR;
 
-    //通过M&PFD置位M0PFD来禁止预取功能
+    //ͨ��M&PFD��λM0PFD����ֹԤȡ����
     FMC_PFAPR |= FMC_PFAPR_M7PFD_MASK | FMC_PFAPR_M6PFD_MASK | FMC_PFAPR_M5PFD_MASK
                      | FMC_PFAPR_M4PFD_MASK | FMC_PFAPR_M3PFD_MASK | FMC_PFAPR_M2PFD_MASK
                      | FMC_PFAPR_M1PFD_MASK | FMC_PFAPR_M0PFD_MASK;
-    ///设置系统分频器
+    ///����ϵͳ��Ƶ��
     //MCG=PLL, core = MCG,  
     SIM_CLKDIV1 =  SIM_CLKDIV1_OUTDIV1(0)    //core = MCG
                  | SIM_CLKDIV1_OUTDIV2(1)    //bus = MCG/2,
                  | SIM_CLKDIV1_OUTDIV3(2)    //FlexBus = MCG/(2+1)
                  | SIM_CLKDIV1_OUTDIV4(7);   //Flash clock= MCG/8
 
-    //从新存FMC_PFAPR的原始值
+    //���´�FMC_PFAPR��ԭʼֵ
     FMC_PFAPR = temp_reg;
 
     MCG_C6 = MCG_C6_PLLS_MASK | MCG_C6_VDIV(pll_vdiv);//PLL =  50M/(prdiv+1) * (pll_vdiv+16)
@@ -143,7 +143,7 @@ void PLL_Init(clk_option opt)
 
     MCG_C1=0x00;
 
-    //等待时钟状态位更新
+    //�ȴ�ʱ��״̬λ����
     while (((MCG_S & MCG_S_CLKST_MASK) >> MCG_S_CLKST_SHIFT) != 0x3){};
 
 
@@ -152,13 +152,13 @@ void PLL_Init(clk_option opt)
 
     
  /*
-        //设置跟踪时钟为内核时钟
+        //���ø���ʱ��Ϊ�ں�ʱ��
     SIM_SOPT2 |= SIM_SOPT2_TRACECLKSEL_MASK;
-    //在PTA6引脚上使能TRACE_CLKOU功能
+    //��PTA6������ʹ��TRACE_CLKOU����
     PORTA_PCR6 = ( PORT_PCR_MUX(0x7));
-    //使能FlexBus模块时钟
+    //ʹ��FlexBusģ��ʱ��
     SIM_SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;
-    //在PTA6引脚上使能FB_CLKOUT功能
+    //��PTA6������ʹ��FB_CLKOUT����
     PORTC_PCR3 = ( PORT_PCR_MUX(0x5));
     */
 }
