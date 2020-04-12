@@ -47,24 +47,21 @@ Echo           E10
 #include "include.h" 
 
 
-void main(void)
-{
+
+ void main(void)
+{   
 	
 	PLL_Init(PLL200);         //初始化PLL为180M 
 	NVIC_SetPriorityGrouping(0x07 - 2);
-  Sys_init_all();
   while(1){
-  //  Test_9AX();
     GCXL();
-    //Test_ADC();
-  //Test_Vl53();
-    //Pid_Motor();
-    //Test_KEY();
-    //track_PID();
-   // delayms(10);
-    //Test_Motor();
-    //Pid_Motor();
-    //Pid_track();
-
+	//track_PID();
+	  
+	 //track_houtui();
+   
+	 
+	 //Test_9AX();
+   //Test_Vl53();
+   //Test_ADC();
   }
 }

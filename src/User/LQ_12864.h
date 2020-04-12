@@ -14,7 +14,7 @@ QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ*/
 #define _LQOLED_H
 
 /*  母板上使用OLED请将 OLED_PIN 定义为1   核心板上使用请将OLED_PIN 定义为0 */
-#define OLED_PIN    1
+#define OLED_PIN    0
 
 void OLED_Init(void);
 void OLED_CLS(void);
